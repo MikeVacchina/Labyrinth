@@ -41,13 +41,6 @@ framework_labyrinth::framework_labyrinth()
 	base.setColor(0.0,1.0,0.0);
 
 	maze.setMaze(walls, base);
-
-	leftMouse = INVALID;
-
-	init_x = -1;
-	init_y = -1;
-	init_theda = 0;
-	init_phi = 0;
 }
 
 framework_labyrinth* framework_labyrinth::instance()
@@ -310,31 +303,16 @@ void framework_labyrinth::specialFunc(int key, int x, int y)
 
 void framework_labyrinth::mouseFunc(int button, int state, int x, int y)
 {
-	std::cout << x << '\t' << y << '\n';
-	if(button == GLUT_LEFT_BUTTON)
-	{
-		if(state == GLUT_DOWN)
-		{
-			leftMouse = DOWN;
-			init_x = x;
-			init_y = y;
-			init_theda = maze.theda;
-			init_phi = maze.phi;
-		}
-		else if(state == GLUT_UP)
-		{
-			leftMouse = UP;
-		}
-	}
+	userInput.handleMouseFunc(button, state, x, y, mvMouseInput(maze.theda, maze.phi));
 }
 
 void framework_labyrinth::motionFunc(int x, int y)
 {
-	if(leftMouse == DOWN)
+	mvMouseOutput mouseOutput;
+	if(userInput.handleMouseMotionFunc(x, y, mouseOutput))
 	{
-		maze.theda = init_theda + (init_y - y)/15.0;
-		maze.phi = init_phi + (x - init_x)/15.0;
-		idleFunc();
+		maze.theda = mouseOutput.theda;
+		maze.phi = mouseOutput.phi;
 	}
 }
 

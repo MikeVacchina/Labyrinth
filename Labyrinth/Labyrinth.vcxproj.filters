@@ -21,9 +21,6 @@
     <ClCompile Include="mvObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mvVertex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mvCube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,6 +42,21 @@
     <ClCompile Include="mvMaze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mvKey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mvInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mvMouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mvKeyboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mvSimpleStructs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="FragShader.txt">
@@ -56,9 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mvObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mvVertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mvCube.h">
@@ -80,6 +89,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mvMaze.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mvKey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mvInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mvMouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mvKeyboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mvSimpleStructs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

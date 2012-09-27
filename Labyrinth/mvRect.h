@@ -8,7 +8,7 @@
 #include <string>
 
 #include "mvObject.h"
-#include "mvVertex.h"
+#include "mvSimpleStructs.h"
 #include "mvObjLoader.h"
 #include "mvMesh.h"
 

@@ -17,8 +17,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 
+#include "mvInput.h"
 #include "mvShader.h"
-#include "mvVertex.h"
+#include "mvSimpleStructs.h"
 #include "mvObject.h"
 #include "mvRect.h"
 #include "mvMaze.h"
@@ -76,10 +77,8 @@ private:
 
 	mvMaze maze;
 
-	double init_x, init_y, init_theda, init_phi;
-	enum clickState {DOWN, UP, INVALID};
-	clickState leftMouse;
-
+	mvInput userInput;
+	
 	static framework_labyrinth *__framework_labyrinth__;
 
 	friend extern void displayWrapperFunc();

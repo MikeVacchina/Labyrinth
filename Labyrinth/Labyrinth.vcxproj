@@ -64,13 +64,17 @@
     <ClCompile Include="framework_labyrinth.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mvCube.cpp" />
+    <ClCompile Include="mvInput.cpp" />
+    <ClCompile Include="mvKey.cpp" />
+    <ClCompile Include="mvKeyboard.cpp" />
     <ClCompile Include="mvMaze.cpp" />
     <ClCompile Include="mvMesh.cpp" />
+    <ClCompile Include="mvMouse.cpp" />
     <ClCompile Include="mvObject.cpp" />
     <ClCompile Include="mvObjLoader.cpp" />
     <ClCompile Include="mvRect.cpp" />
     <ClCompile Include="mvShader.cpp" />
-    <ClCompile Include="mvVertex.cpp" />
+    <ClCompile Include="mvSimpleStructs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FragShader.txt" />
@@ -79,13 +83,17 @@
   <ItemGroup>
     <ClInclude Include="framework_labyrinth.h" />
     <ClInclude Include="mvCube.h" />
+    <ClInclude Include="mvInput.h" />
+    <ClInclude Include="mvKey.h" />
+    <ClInclude Include="mvKeyboard.h" />
     <ClInclude Include="mvMaze.h" />
     <ClInclude Include="mvMesh.h" />
+    <ClInclude Include="mvMouse.h" />
     <ClInclude Include="mvObject.h" />
     <ClInclude Include="mvObjLoader.h" />
     <ClInclude Include="mvRect.h" />
     <ClInclude Include="mvShader.h" />
-    <ClInclude Include="mvVertex.h" />
+    <ClInclude Include="mvSimpleStructs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "mvVertex.h"
+#include "mvSimpleStructs.h"
 
 class vec3
 {
