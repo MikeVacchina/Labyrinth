@@ -48,13 +48,13 @@
     <ClCompile Include="mvInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mvMouse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mvKeyboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mvSimpleStructs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mvTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mvDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -97,13 +97,16 @@
     <ClInclude Include="mvInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mvMouse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mvKeyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="mvSimpleStructs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mvTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mvDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

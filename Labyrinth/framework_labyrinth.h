@@ -6,8 +6,6 @@
 #include <gl/glut.h> // doing otherwise causes compiler shouting
 
 #include <iostream>
-//#include <chrono>
-#include <ctime>
 #include <cmath>
 #include <fstream>
 #include <string>
@@ -17,12 +15,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 
+#include "defines.h"
+
 #include "mvInput.h"
 #include "mvShader.h"
 #include "mvSimpleStructs.h"
 #include "mvObject.h"
 #include "mvRect.h"
 #include "mvMaze.h"
+#include "mvTime.h"
+#include "mvDisplay.h"
 
 #define M_PI        3.14159265358979323846264338327950288   /* pi */
 
@@ -41,41 +43,19 @@ private:
 	framework_labyrinth();
 
 	void initializeCallbacks();
-	
-	bool initializeResources();
-
-	void glBufferInitialize(mvObject &object);
 
 	void displayFunc();
 	void reshapeFunc(int newWidth, int newHeight);
 	void keyboardFunc(unsigned char key, int x, int y);
+	void keyboardUpFunc(unsigned char key, int x, int y);
 	void specialFunc(int key, int x, int y);
+	void specialUpFunc(int key, int x, int y);
 	void mouseFunc(int button, int state, int x, int y);
 	void motionFunc(int x, int y);
 	void idleFunc();
 
-	void displayObject(mvObject object);
-
-	void updateDisplay();
-
-	float getDT();
-
-	int width, height;
-	std::clock_t t1, t2;
-
-	GLuint program;
-
-	//uniform locations
-	GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
-
-	//attribute locations
-	GLint loc_position;
-	GLint loc_color;
-
-	glm::mat4 view;//world->eye
-	glm::mat4 projection;//eye->clip
-
-	mvMaze maze;
+	mvTime stopwatch;
+	mvDisplay display;
 
 	mvInput userInput;
 	
@@ -84,7 +64,9 @@ private:
 	friend extern void displayWrapperFunc();
 	friend extern void reshapeWrapperFunc(int newWidth, int newHeight);
 	friend extern void keyboardWrapperFunc(unsigned char key, int x, int y);
+	friend extern void keyboardUpWrapperFunc(unsigned char key, int x, int y);
 	friend extern void specialWrapperFunc(int key, int x, int y);
+	friend extern void specialUpWrapperFunc(int key, int x, int y);
 	friend extern void mouseWrapperFunc(int button, int state, int x, int y);
 	friend extern void motionWrapperFunc(int x, int y);
 	friend extern void idleWrapperFunc();
@@ -95,7 +77,9 @@ private:
 extern void displayWrapperFunc();
 extern void reshapeWrapperFunc(int newWidth, int newHeight);
 extern void keyboardWrapperFunc(unsigned char key, int x, int y);
+extern void keyboardUpWrapperFunc(unsigned char key, int x, int y);
 extern void specialWrapperFunc(int key, int x, int y);
+extern void specialUpWrapperFunc(int key, int x, int y);
 extern void mouseWrapperFunc(int button, int state, int x, int y);
 extern void motionWrapperFunc(int x, int y);
 extern void idleWrapperFunc();

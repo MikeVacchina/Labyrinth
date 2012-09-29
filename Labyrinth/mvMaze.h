@@ -23,9 +23,6 @@ public:
 
 	void setMaze(std::vector<mvRect> &walls, mvRect base);
 
-	double theda;
-	double phi;
-
 private:
 	mvMesh mesh;
 };

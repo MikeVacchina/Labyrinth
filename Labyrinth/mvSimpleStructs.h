@@ -4,16 +4,18 @@
 #include <gl/glew.h> // glew must be included before the main gl libs
 #include <gl/glut.h> // doing otherwise causes compiler shouting
 
+#include "defines.h"
+
 struct mvVertex
 {
     GLfloat position[3];
     GLfloat color[3];
 };
 
-class mvMouseInput
+class mvMouseData
 {
 public:
-	mvMouseInput(double _theda=0.0, double _phi=0.0)
+	mvMouseData(double _theda=0.0, double _phi=0.0)
 	{
 		theda = _theda;
 		phi   = _phi;
@@ -23,18 +25,17 @@ public:
 	double phi;
 };
 
-class mvMouseOutput
+class mvKeyboardData
 {
 public:
-	mvMouseOutput(double _theda=0.0, double _phi=0.0)
+	mvKeyboardData(enum _keyState ks = KEY_INVALID)
 	{
-		theda = _theda;
-		phi   = _phi;
+		keyState = ks;
 	}
 
-	double theda;
-	double phi;
+	int keyState;
 };
+
 
 #endif //MVSIMPLESTRUCTS
 
