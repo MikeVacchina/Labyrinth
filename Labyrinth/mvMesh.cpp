@@ -148,6 +148,18 @@ void mvMesh::addMesh(mvMesh &mesh)
 	}
 }
 
+void mvMesh::scale(double s)
+{
+	for(int i=0,size=vertices.size();i<size;++i)
+		vertices[i] = vertices[i].mulScalar(s);
+}
+
+void mvMesh::translate(vec3 v)
+{
+	for(int i=0,size=vertices.size();i<size;++i)
+		vertices[i] = vertices[i].plus(v);
+}
+
 void mvMesh::clear()
 {
 	vertices.clear();

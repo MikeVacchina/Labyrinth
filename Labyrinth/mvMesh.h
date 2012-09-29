@@ -20,6 +20,16 @@ public:
 		return vec3(x+val, y+val, z+val);
 	}
 
+	vec3 plus(vec3 val)
+	{
+		return vec3(x+val.x, y+val.y, z+val.z);
+	}
+
+	vec3 mulScalar(double val)
+	{
+		return vec3(x*val, y*val, z*val);
+	}
+
 	double x, y, z;
 };
 
@@ -39,6 +49,9 @@ public:
 	int countVertices();
 
 	void addMesh(mvMesh &mesh);
+	
+	void scale(double s);
+	void translate(vec3 v);
 
 	void clear();
 

@@ -24,6 +24,7 @@
 #include "mvRect.h"
 #include "mvMaze.h"
 #include "mvTime.h"
+#include "mvSphere.h"
 
 class mvDisplay
 {
@@ -66,6 +67,7 @@ private:
 	glm::mat4 projection;//eye->clip
 
 	mvMaze maze;
+	mvSphere sphere;
 
 	double phi, theda;
 };

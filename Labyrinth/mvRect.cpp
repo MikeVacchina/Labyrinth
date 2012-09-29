@@ -4,18 +4,7 @@ mvRect::mvRect(const char *filename)
 {
 	if(filename)
 	{
-		std::string error;
-		mvObjLoader(filename, mesh, error);
-
-		if(error != "")
-		{
-			std::cerr << "[ERROR] cube.obj FAILED TO LOAD: ";
-			std::cerr << error;
-			return;
-		}
-
-		geometry = mesh.getGeometry();
-		vertexCount = mesh.countVertices();
+		loadMesh(filename);
 	}
 }
 

@@ -34,6 +34,13 @@ mvDisplay::mvDisplay()
 
 	maze.setMaze(walls, base);
 
+	sphere.loadMesh("sphere.obj");
+	sphere.setColor(1.0,1.0,0.0);
+	double r = 0.5/sphere.getMeshRadius();
+	sphere.scale(r);
+	r = sphere.getMeshRadius();
+	sphere.translate(0.0,r,0.0);
+
 	userInput = NULL;
 }
 
@@ -56,6 +63,7 @@ void mvDisplay::initializeDisplay(std::string windowName, int w, int h)
 bool mvDisplay::initializeDisplayResources()
 {
 	objectBufferInit(maze);
+	objectBufferInit(sphere);
 
 	GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -177,6 +185,7 @@ void mvDisplay::display()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	displayObject(maze);
+	displayObject(sphere);
 
     //swap the buffers
     glutSwapBuffers();
