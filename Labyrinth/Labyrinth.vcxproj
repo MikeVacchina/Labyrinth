@@ -63,6 +63,7 @@
   <ItemGroup>
     <ClCompile Include="framework_labyrinth.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mvCollision.cpp" />
     <ClCompile Include="mvCube.cpp" />
     <ClCompile Include="mvDisplay.cpp" />
     <ClCompile Include="mvInput.cpp" />
@@ -71,6 +72,7 @@
     <ClCompile Include="mvMesh.cpp" />
     <ClCompile Include="mvObject.cpp" />
     <ClCompile Include="mvObjLoader.cpp" />
+    <ClCompile Include="mvPhysics.cpp" />
     <ClCompile Include="mvRect.cpp" />
     <ClCompile Include="mvShader.cpp" />
     <ClCompile Include="mvSimpleStructs.cpp" />
@@ -84,6 +86,7 @@
   <ItemGroup>
     <ClInclude Include="defines.h" />
     <ClInclude Include="framework_labyrinth.h" />
+    <ClInclude Include="mvCollision.h" />
     <ClInclude Include="mvCube.h" />
     <ClInclude Include="mvDisplay.h" />
     <ClInclude Include="mvInput.h" />
@@ -92,6 +95,7 @@
     <ClInclude Include="mvMesh.h" />
     <ClInclude Include="mvObject.h" />
     <ClInclude Include="mvObjLoader.h" />
+    <ClInclude Include="mvPhysics.h" />
     <ClInclude Include="mvRect.h" />
     <ClInclude Include="mvShader.h" />
     <ClInclude Include="mvSimpleStructs.h" />

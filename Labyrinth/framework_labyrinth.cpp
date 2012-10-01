@@ -112,8 +112,6 @@ void framework_labyrinth::motionFunc(int x, int y)
 
 void framework_labyrinth::idleFunc()
 {
-	//update physics
-
 	display.updateDisplay();
 
     glutPostRedisplay();//call the display callback

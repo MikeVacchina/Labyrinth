@@ -5,34 +5,6 @@
 
 #include "mvSimpleStructs.h"
 
-class vec3
-{
-public:
-	vec3(double _x=0, double _y=0, double _z=0)
-	{
-		x = _x;
-		y = _y;
-		z = _z;
-	}
-
-	vec3 plus(int val)
-	{
-		return vec3(x+val, y+val, z+val);
-	}
-
-	vec3 plus(vec3 val)
-	{
-		return vec3(x+val.x, y+val.y, z+val.z);
-	}
-
-	vec3 mulScalar(double val)
-	{
-		return vec3(x*val, y*val, z*val);
-	}
-
-	double x, y, z;
-};
-
 class mvMesh
 {
 public:
@@ -51,6 +23,7 @@ public:
 	void addMesh(mvMesh &mesh);
 	
 	void scale(double s);
+	void scale(vec3 s);
 	void translate(vec3 v);
 
 	void clear();

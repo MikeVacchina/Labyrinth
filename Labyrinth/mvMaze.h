@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "mvObject.h"
 #include "mvSimpleStructs.h"
@@ -18,13 +19,20 @@ class mvMaze : public mvObject
 {
 public:
 	mvMaze();
-	mvMaze(std::vector<mvRect> &walls, mvRect base);
 	~mvMaze();
+	
+	void setSize(double w, double d);
+	void setWall(double x, double z, double w, double d);
 
-	void setMaze(std::vector<mvRect> &walls, mvRect base);
+	void init();
+	
+	std::vector<mvWall> xWalls;
+	std::vector<mvWall> zWalls;
 
 private:
 	mvMesh mesh;
+
+	mvRect rect;
 };
 
 #endif //MVMAZE

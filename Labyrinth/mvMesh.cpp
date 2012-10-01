@@ -154,6 +154,12 @@ void mvMesh::scale(double s)
 		vertices[i] = vertices[i].mulScalar(s);
 }
 
+void mvMesh::scale(vec3 s)
+{
+	for(int i=0,size=vertices.size();i<size;++i)
+		vertices[i] = vertices[i].mul(s);
+}
+
 void mvMesh::translate(vec3 v)
 {
 	for(int i=0,size=vertices.size();i<size;++i)

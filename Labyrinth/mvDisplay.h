@@ -25,6 +25,7 @@
 #include "mvMaze.h"
 #include "mvTime.h"
 #include "mvSphere.h"
+#include "mvPhysics.h"
 
 class mvDisplay
 {
@@ -51,6 +52,8 @@ private:
 	void displayObject(mvObject &object);
 
 	mvInput *userInput;
+	mvPhysics physics;
+	mvTime stopwatch;
 	
 	int width, height;
 

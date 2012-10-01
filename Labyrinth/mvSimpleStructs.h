@@ -36,6 +36,57 @@ public:
 	int keyState;
 };
 
+class vec3
+{
+public:
+	vec3(double _x=0, double _y=0, double _z=0)
+	{
+		x = _x;
+		y = _y;
+		z = _z;
+	}
+
+	vec3 plus(int val)
+	{
+		return vec3(x+val, y+val, z+val);
+	}
+
+	vec3 plus(vec3 val)
+	{
+		return vec3(x+val.x, y+val.y, z+val.z);
+	}
+
+	vec3 mulScalar(double val)
+	{
+		return vec3(x*val, y*val, z*val);
+	}
+
+	vec3 mul(vec3 val)
+	{
+		return vec3(x*val.x, y*val.y, z*val.z);
+	}
+
+	double x, y, z;
+};
+
+class mvWall
+{
+public:
+	mvWall(double s=0, double e=0, int i=-1)
+	{
+		start = s;
+		end = e;
+		id = i;
+	}
+
+	bool operator<(mvWall &other)
+	{
+		return start < other.start;
+	}
+
+	double start, end;
+	int id;
+};
 
 #endif //MVSIMPLESTRUCTS
 

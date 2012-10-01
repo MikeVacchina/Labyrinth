@@ -8,31 +8,13 @@ mvDisplay::mvDisplay()
 
 	theda = 0.0;
 	phi = 0.0;
-	
-	std::vector<mvRect> walls;
-	mvRect wall;
-	mvRect base;
 
-	wall.loadMesh("wall1.obj");
-	wall.setColor(1.0,0.0,0.75);
-	walls.push_back(wall);
-
-	wall.loadMesh("wall2.obj");
-	wall.setColor(0.5,0.0,1.0);
-	walls.push_back(wall);
-
-	wall.loadMesh("wall3.obj");
-	wall.setColor(1.0,0.0,0.5);
-	walls.push_back(wall);
-
-	wall.loadMesh("wall4.obj");
-	wall.setColor(0.75,0.0,1.0);
-	walls.push_back(wall);
-
-	base.loadMesh("base.obj");
-	base.setColor(0.0,1.0,0.0);
-
-	maze.setMaze(walls, base);
+	maze.setSize(10,10);
+	maze.setWall(4.75, 0, 0.5, 10);
+	maze.setWall(-4.75, 0, 0.5, 10);
+	maze.setWall(0, 4.75, 9, 0.5);
+	maze.setWall(0, -4.75, 9, 0.5);
+	maze.init();
 
 	sphere.loadMesh("sphere.obj");
 	sphere.setColor(1.0,1.0,0.0);
@@ -40,6 +22,9 @@ mvDisplay::mvDisplay()
 	sphere.scale(r);
 	r = sphere.getMeshRadius();
 	sphere.translate(0.0,r,0.0);
+
+	physics.setPos(glm::vec3(0.0,0.0,0.0));
+	physics.setVel(glm::vec3(0.0,0.0,0.0));
 
 	userInput = NULL;
 }
@@ -173,7 +158,7 @@ bool mvDisplay::initializeDisplayResources()
     //enable depth testing
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-
+	stopwatch.startTime();
     //and its done
     return true;
 }
@@ -208,14 +193,14 @@ void mvDisplay::updateDisplay()
 	deltaPhiTime -= userInput->timeSpecialDown(GLUT_KEY_LEFT);
 	deltaPhiTime += userInput->timeSpecialDown(GLUT_KEY_RIGHT);
 
-	phi += deltaPhiTime * keyRotationRate;
+	setPhi(phi + deltaPhiTime * keyRotationRate);
 	
 	deltaThedaTime -= userInput->timeKeyDown('s');
 	deltaThedaTime += userInput->timeKeyDown('w');
 	deltaThedaTime -= userInput->timeSpecialDown(GLUT_KEY_DOWN);
 	deltaThedaTime += userInput->timeSpecialDown(GLUT_KEY_UP);
 
-	theda += deltaThedaTime * keyRotationRate;
+	setTheda(theda + deltaThedaTime * keyRotationRate);
 	
 	rotationTheda = glm::rotate(glm::mat4(1.0f), (float)theda, glm::vec3(1.0,0.0,0.0));
 
@@ -224,6 +209,22 @@ void mvDisplay::updateDisplay()
 	rotationPhi = glm::rotate(glm::mat4(1.0f), (float)phi, glm::vec3(phiAxis.x, phiAxis.y, phiAxis.z));
 
 	maze.model = rotationTheda * rotationPhi;
+
+	glm::mat4 worldRotation = glm::inverse(maze.model);
+
+	glm::vec4 gravity(0.0,-9.8,0.0,0.0);
+
+	gravity = worldRotation*gravity;
+	
+	physics.setAccel(glm::vec3(gravity.x, 0.0, gravity.z));
+
+	physics.update(stopwatch.resetTime());
+
+	physics.checkCollision(maze.xWalls, maze.zWalls,sphere.getMeshRadius());
+
+	glm::mat4 translation = glm::translate(glm::mat4(1.0f),physics.getPos());
+
+	sphere.model = maze.model * translation;
 }
 	
 void mvDisplay::reshape(int newWidth, int newHeight)
