@@ -13,6 +13,8 @@
 
 #include "mvSimpleStructs.h"
 
+#include "mvMath.h"
+
 class mvPhysics
 {
 public:
@@ -86,11 +88,24 @@ public:
 
 		std::set_intersection(xWallsSet.begin(), xWallsSet.end(), zWallsSet.begin(), zWallsSet.end(), std::inserter(intersections, intersections.end()));
 	
-		if(intersections.size()>0)//there has been a collision!
+		for(std::set<int>::iterator it=intersections.begin();it!=intersections.end();++it)//there has been a collision!
 		{
 			//resolve collision
+
+			std::vector<std::pair<glm::vec2,glm::vec2> > wallPts;
+
+			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[*it].first].start, zWalls[walls[*it].second].start),
+															glm::vec2( xWalls[walls[*it].first].start, zWalls[walls[*it].second].end)));
+
+			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[*it].first].start, zWalls[walls[*it].second].end),
+															glm::vec2( xWalls[walls[*it].first].end, zWalls[walls[*it].second].end)));
 			
-			std::set<int>::iterator it = intersections.begin();
+			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[*it].first].end, zWalls[walls[*it].second].end),
+															glm::vec2( xWalls[walls[*it].first].end, zWalls[walls[*it].second].start)));
+
+			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[*it].first].end, zWalls[walls[*it].second].start),
+															glm::vec2( xWalls[walls[*it].first].start, zWalls[walls[*it].second].start)));
+			
 			if(P.x > xWalls[*it].start && P.x < xWalls[*it].end && P.z > zWalls[*it].start && P.z < zWalls[*it].end)
 			{
 				//center is in wall
@@ -103,10 +118,33 @@ public:
 			else
 			{
 				//radius intersected a wall
+				
+				double dist = distanceLineSegPt(wallPts[0].first,wallPts[0].second,glm::vec2(P.x, P.z));
+				std::vector<int> intersectedSegments;
+				intersectedSegments.push_back(0);
 
-				//get closest distance from center of sphere to each line segment (assumed as lines)
-				//the smallest distance(s) show which segment(s) sphere hit
+				for(int i=1;i<4;++i)
+				{
+					//get closest distance from center of sphere to each line segment (assumed as lines)
+					double d = distanceLineSegPt(wallPts[i].first,wallPts[i].second,glm::vec2(P.x, P.z));
+					
+					//the smallest distance(s) show which segment(s) sphere hit
+					if(d < dist)
+					{
+						intersectedSegments.clear();
+						intersectedSegments.push_back(i);
+					}
+					else if(d == dist)
+					{
+						intersectedSegments.push_back(i);
+					}
+				}
+
 				//get normal to line segment(s)
+				for(int i=0, size=intersectedSegments.size();i<size;++i)
+				{
+				}
+
 				//bounce using normal
 			}
 
