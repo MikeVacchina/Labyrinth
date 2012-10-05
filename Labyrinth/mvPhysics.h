@@ -92,47 +92,56 @@ public:
 		{
 			//resolve collision
 
+			int index = (*it);
+
 			std::vector<std::pair<glm::vec2,glm::vec2> > wallPts;
 
-			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[*it].first].start, zWalls[walls[*it].second].start),
-															glm::vec2( xWalls[walls[*it].first].start, zWalls[walls[*it].second].end)));
+			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[index].first].start, zWalls[walls[index].second].start),
+															glm::vec2( xWalls[walls[index].first].start, zWalls[walls[index].second].end)));
 
-			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[*it].first].start, zWalls[walls[*it].second].end),
-															glm::vec2( xWalls[walls[*it].first].end, zWalls[walls[*it].second].end)));
+			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[index].first].start, zWalls[walls[index].second].end),
+															glm::vec2( xWalls[walls[index].first].end, zWalls[walls[index].second].end)));
 			
-			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[*it].first].end, zWalls[walls[*it].second].end),
-															glm::vec2( xWalls[walls[*it].first].end, zWalls[walls[*it].second].start)));
+			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[index].first].end, zWalls[walls[index].second].end),
+															glm::vec2( xWalls[walls[index].first].end, zWalls[walls[index].second].start)));
 
-			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[*it].first].end, zWalls[walls[*it].second].start),
-															glm::vec2( xWalls[walls[*it].first].start, zWalls[walls[*it].second].start)));
+			wallPts.push_back(std::pair<glm::vec2,glm::vec2>(glm::vec2( xWalls[walls[index].first].end, zWalls[walls[index].second].start),
+															glm::vec2( xWalls[walls[index].first].start, zWalls[walls[index].second].start)));
+
+			glm::vec2 norm(0.0);
 			
-			if(P.x > xWalls[*it].start && P.x < xWalls[*it].end && P.z > zWalls[*it].start && P.z < zWalls[*it].end)
+			if(P.x > xWalls[walls[index].first].start && P.x < xWalls[walls[index].first].end && P.z > zWalls[walls[index].second].start && P.z < zWalls[walls[index].second].end)
 			{
 				//center is in wall
 				
 				//get line segment(s) it intersects with
 					//using commented out section below
+				//int segID = getIntersectingSegment(wallPts, glm::vec2(lP.x, lP.y),glm::vec2(P.x, P.y));
+
 				//get normal to line segment(s)
 				//bounce using normal
+
+				int a = 5;
 			}
 			else
 			{
 				//radius intersected a wall
 				
-				double dist = distanceLineSegPt(wallPts[0].first,wallPts[0].second,glm::vec2(P.x, P.z));
+				double dist = std::abs(distanceLineSegPt(wallPts[0].first,wallPts[0].second,glm::vec2(P.x, P.z)) - radius);
 				std::vector<int> intersectedSegments;
 				intersectedSegments.push_back(0);
 
 				for(int i=1;i<4;++i)
 				{
 					//get closest distance from center of sphere to each line segment (assumed as lines)
-					double d = distanceLineSegPt(wallPts[i].first,wallPts[i].second,glm::vec2(P.x, P.z));
+					double d = std::abs(distanceLineSegPt(wallPts[i].first,wallPts[i].second,glm::vec2(P.x, P.z)) - radius);
 					
 					//the smallest distance(s) show which segment(s) sphere hit
 					if(d < dist)
 					{
 						intersectedSegments.clear();
 						intersectedSegments.push_back(i);
+						dist = d;
 					}
 					else if(d == dist)
 					{
@@ -143,10 +152,39 @@ public:
 				//get normal to line segment(s)
 				for(int i=0, size=intersectedSegments.size();i<size;++i)
 				{
+					norm.x += -1*(wallPts[intersectedSegments[i]].first.y - wallPts[intersectedSegments[i]].second.y);
+					norm.y += -1*(wallPts[intersectedSegments[i]].first.x - wallPts[intersectedSegments[i]].second.x);
 				}
+				//need to actually determine the direction of norm
+				norm /= (double)intersectedSegments.size();
+				norm = glm::normalize(norm);
+
+				lP = P;
+
+				glm::vec2 offset(norm.x*dist, norm.y*dist);
+
+				P = glm::vec3(offset.x + P.x, 0.0, offset.y + P.z);
 
 				//bounce using normal
 			}
+
+			double u = -2*glm::dot(V,glm::vec3(norm.x, 0.0, norm.y));
+
+			glm::vec3 nV = glm::normalize( V + glm::vec3(norm.x*u, 0.0, norm.y*u) );
+
+			//glm::vec3 test = glm::cross(glm::vec3(norm.x, 0.0, norm.y), V);
+
+			//glm::vec3 nV = glm::cross(V, test);
+
+			nV = glm::normalize(nV);
+
+			double scale = glm::length(V)*0.75;
+			
+			nV.x = nV.x * scale;
+			nV.y = nV.y * scale;
+			nV.z = nV.z * scale;
+
+			V = nV;
 
 			//glm::vec2 motionFirst(lP.x, lP.z);
 			//glm::vec2 motionSecond(P.x-lP.x, P.z-lP.z);
@@ -185,8 +223,6 @@ public:
 			//		}
 			//	}
 			//}
-
-			int a = 5;
 		}
 	}
 

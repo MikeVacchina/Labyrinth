@@ -66,6 +66,9 @@
     <ClCompile Include="mvCollision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mvMath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="FragShader.txt">
@@ -125,6 +128,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mvCollision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mvMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
