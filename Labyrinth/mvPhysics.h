@@ -159,6 +159,9 @@ public:
 				norm /= (double)intersectedSegments.size();
 				norm = glm::normalize(norm);
 
+				if(glm::dot(norm,wallPts[intersectedSegments[0]].first-glm::vec2(P.x,P.z)) > 0)
+					norm *= -1;
+
 				lP = P;
 
 				glm::vec2 offset(norm.x*dist, norm.y*dist);
@@ -178,7 +181,7 @@ public:
 
 			nV = glm::normalize(nV);
 
-			double scale = glm::length(V)*0.75;
+			double scale = glm::length(V)*0.5;
 			
 			nV.x = nV.x * scale;
 			nV.y = nV.y * scale;
