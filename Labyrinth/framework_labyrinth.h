@@ -17,35 +17,43 @@
 
 #include "defines.h"
 
-#include "mvInput.h"
-#include "mvShader.h"
 #include "mvSimpleStructs.h"
-#include "mvObject.h"
-#include "mvRect.h"
-#include "mvMaze.h"
+
+#include "mvShader.h"
+#include "mvInput.h"
 #include "mvTime.h"
 #include "mvDisplay.h"
 #include "mvPhysics.h"
 #include "mvCollision.h"
+#include "mvObject.h"
+#include "mvSphere.h"
+#include "mvMaze.h"
 
 #define M_PI        3.14159265358979323846264338327950288   /* pi */
 
-extern void initalizeGlut(int argc, char **argv);
-
+//Initialize/Start Glut Functions
+extern void initializeGlut(int argc, char **argv);
 extern void startGlut();
 
+//framework class for labyrinth game
+//singleton class
+//accessed by framework_labyrith::instance()
 class framework_labyrinth
 {
 public:
+	//singleton instance
 	static framework_labyrinth* instance();
 
+	//initialize labyrinth with glew/glut
 	bool initialize(std::string windowName, int windowWdith, int windowHeight);
 
 private:
+	//make constructor private for singleton class
 	framework_labyrinth();
 
 	void initializeCallbacks();
 
+	//framework function callbacks
 	void displayFunc();
 	void reshapeFunc(int newWidth, int newHeight);
 	void keyboardFunc(unsigned char key, int x, int y);
@@ -56,24 +64,35 @@ private:
 	void motionFunc(int x, int y);
 	void idleFunc();
 
+	//variable setters to enforce constraints on variables
 	void setTheda(double t);
 	void setPhi(double p);
 
+	//timer
 	mvTime stopwatch;
+
+	//display handler
 	mvDisplay display;
 
+	//input handler
 	mvInput userInput;
+
+	//physics handler
 	mvPhysics physics;
+
+	//collision handler
 	mvCollision collision;
 
-	int startMenu;
-
+	//keep a reference to objects in framework
 	std::vector<mvObject*> objs;
-
+	
+	//maze orientation variables
 	double theda, phi;
 	
+	//singleton instance
 	static framework_labyrinth *__framework_labyrinth__;
 
+	//friend callbacks for glut
 	friend extern void displayWrapperFunc();
 	friend extern void reshapeWrapperFunc(int newWidth, int newHeight);
 	friend extern void keyboardWrapperFunc(unsigned char key, int x, int y);
@@ -85,8 +104,7 @@ private:
 	friend extern void idleWrapperFunc();
 };
 
-//static framework_labyrinth labyrinth;
-
+//callbacks for glut which call framework funcs
 extern void displayWrapperFunc();
 extern void reshapeWrapperFunc(int newWidth, int newHeight);
 extern void keyboardWrapperFunc(unsigned char key, int x, int y);

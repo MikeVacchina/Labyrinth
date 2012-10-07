@@ -1,8 +1,9 @@
 #include "framework_labyrinth.h"
 
+//Singleton class get initialized to NULL
 framework_labyrinth* framework_labyrinth::__framework_labyrinth__ = NULL;
 
-extern void initalizeGlut(int argc, char **argv)
+extern void initializeGlut(int argc, char **argv)
 {
     glutInit(&argc, argv);
 }
@@ -20,6 +21,7 @@ framework_labyrinth::framework_labyrinth()
 
 framework_labyrinth* framework_labyrinth::instance()
 {
+	//check if object already created
 	if(!__framework_labyrinth__)
 		__framework_labyrinth__ = new framework_labyrinth();
 	return __framework_labyrinth__;
@@ -39,6 +41,7 @@ bool framework_labyrinth::initialize(std::string windowName, int windowWidth, in
         return false;
     }
 
+	//set key repeat to be ignored for smooth key presses
 	glutIgnoreKeyRepeat(true);
 	
 	//initialize callbacks
@@ -48,8 +51,7 @@ bool framework_labyrinth::initialize(std::string windowName, int windowWidth, in
 	if(!display.initializeDisplayResources())
 		return false;
 
-	//set objects pointers in collision and physics?
-
+	//set objects pointers in collision and physics objects
 	mvMaze *m = display.getMaze();
 	mvSphere *b = display.getSphere();
 
@@ -63,12 +65,15 @@ bool framework_labyrinth::initialize(std::string windowName, int windowWidth, in
 	collision.setMaze(m);
 	collision.setBall(b);
 
+	//start stopwatch
 	stopwatch.startTime();
+
 	return true;
 }
 
 void framework_labyrinth::initializeCallbacks()
 {
+	//set callbacks to friended functions
 	glutDisplayFunc(displayWrapperFunc);
 	glutReshapeFunc(reshapeWrapperFunc);
 	glutKeyboardFunc(keyboardWrapperFunc);
@@ -82,44 +87,54 @@ void framework_labyrinth::initializeCallbacks()
 
 void framework_labyrinth::displayFunc()
 {
+	//pass to display
 	display.display();
 }
 
 void framework_labyrinth::reshapeFunc(int newWidth, int newHeight)
 {
+	//tell display to reshape
 	display.reshape(newWidth, newHeight);
 }
 
 void framework_labyrinth::keyboardFunc(unsigned char key, int x, int y)
 {
+	//pass to input
 	userInput.handleKeyboardFunc(key,mvKeyboardData(KEY_DOWN));
 }
 
 void framework_labyrinth::keyboardUpFunc(unsigned char key, int x, int y)
 {
+	//pass to input
 	userInput.handleKeyboardFunc(key,mvKeyboardData(KEY_UP));
 }
 
 void framework_labyrinth::specialFunc(int key, int x, int y)
 {
+	//pass to input
 	userInput.handleSpecialFunc(key,mvKeyboardData(KEY_DOWN));
 }
 
 void framework_labyrinth::specialUpFunc(int key, int x, int y)
 {
+	//pass to input
 	userInput.handleSpecialFunc(key,mvKeyboardData(KEY_UP));
 }
 
 void framework_labyrinth::mouseFunc(int button, int state, int x, int y)
 {
+	//pass to input
 	userInput.handleMouseFunc(button, state, x, y, mvMouseData(theda,phi));
 }
 
 void framework_labyrinth::motionFunc(int x, int y)
 {
+	//pass to input
 	mvMouseData mouseOutput;
 	if(userInput.handleMouseMotionFunc(x, y, mouseOutput))
 	{
+		//set maze orientation 
+			//NOTE: mouse control does not us dt but mouse dpi makes movements small
 		setTheda(mouseOutput.theda);
 		setPhi(mouseOutput.phi);
 	}
@@ -128,7 +143,7 @@ void framework_labyrinth::motionFunc(int x, int y)
 void framework_labyrinth::idleFunc()
 {
 	//update object pos from input
-	//updateObjFromInput();
+
 	glm::mat4 rotationTheda;
 	glm::mat4 rotationPhi;
 	glm::mat4 mm;//mazeModel
@@ -140,6 +155,7 @@ void framework_labyrinth::idleFunc()
 	double deltaThedaTime=0.0;
 	double deltaPhiTime=0.0;
 	
+	//get time of each key down as there effect on maze orientation
 	deltaPhiTime -= userInput.timeKeyDown('a');
 	deltaPhiTime += userInput.timeKeyDown('d');
 	deltaPhiTime -= userInput.timeSpecialDown(GLUT_KEY_LEFT);
@@ -154,51 +170,57 @@ void framework_labyrinth::idleFunc()
 
 	setTheda(theda + deltaThedaTime * keyRotationRate);
 	
+	//create theda rotation matrix
 	rotationTheda = glm::rotate(glm::mat4(1.0f), (float)theda, glm::vec3(1.0,0.0,0.0));
 
+	//rotate phi rotation axis
 	phiAxis = rotationTheda*phiAxis;
 
+	//create phi rotation matrix
 	rotationPhi = glm::rotate(glm::mat4(1.0f), (float)phi, glm::vec3(phiAxis.x, phiAxis.y, phiAxis.z));
 
+	//create maze model matrix
 	mm = rotationTheda * rotationPhi;
 
+	//set maze model matrix in display
 	display.setMazeModelMat(mm);
 
-	//get gravity acceleration
+	//create gravity based on maze orientation
 
+	//assume maze is static and world rotates
 	glm::mat4 worldRotation = glm::inverse(mm);
 
+	//default gravity
 	glm::vec4 gravity(0.0,-9.8,0.0,0.0);
 
+	//get gravity relative to static maze
 	gravity = worldRotation*gravity;
 	
+	//set gravity in physics
 	physics.setGravity(glm::vec3(gravity.x, 0.0, gravity.z));
 
-	//update physics for object
+	//update physics for objects
 	physics.update(stopwatch.resetTime());
-	
-	//get object references from display
-	//check collision based on those objects
 
-	collision.resolveCollisions();//need walls/holes/goal and sphere radius
+	//resolve any possible collisions that might occur
+	collision.resolveCollisions();
 
+	//get ball position
 	glm::mat4 translation = glm::translate(glm::mat4(1.0f),objs[1]->pos);
 
+	//orient ball in maze properly
 	display.setBallModelMat(mm * translation);
 
-	//physics update
-
-	//collision check
-
 	//update display
-
 	display.display();
 
-    glutPostRedisplay();//call the display callback
+	//call the glut display callback
+    glutPostRedisplay();
 }
 
 void framework_labyrinth::setTheda(double t)
 {
+	//do not allow orientation to exceed 45 degrees
 	if(t<-45.0)
 		theda = -45.0;
 	else if(t>45.0)
@@ -209,6 +231,7 @@ void framework_labyrinth::setTheda(double t)
 
 void framework_labyrinth::setPhi(double p)
 {
+	//do not allow orientation to exceed 45 degrees
 	if(p<-45.0)
 		phi = -45.0;
 	else if(p>45.0)
@@ -217,6 +240,7 @@ void framework_labyrinth::setPhi(double p)
 		phi = p;
 }
 
+//glut callback wrapper functions simply call corresponding functions in framework as glut is a c api
 extern void displayWrapperFunc()
 {
 	framework_labyrinth::instance()->displayFunc();

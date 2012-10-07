@@ -5,12 +5,18 @@
 
 int main(int argc, char **argv)
 {
+	//set start (default) window size
 	int windowWidth = 640;
 	int windowHeight = 480;
-	initalizeGlut(argc,argv);
 
+	//initialize glut
+	initializeGlut(argc,argv);
+
+	//initialize labyrinth game
 	framework_labyrinth::instance()->initialize("Labyrinth Game", windowWidth, windowHeight);
 
+	//start glut main loop
 	startGlut();
+
 	return 1;
 }

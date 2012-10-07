@@ -1,27 +1,24 @@
-#ifndef MVCUBE
-#define MVCUBE
-
-#include <gl/glew.h> // glew must be included before the main gl libs
-#include <gl/glut.h> // doing otherwise causes compiler shouting
+#ifndef MVRECT
+#define MVRECT
 
 #include <iostream>
-#include <string>
 
 #include "mvObject.h"
-#include "mvSimpleStructs.h"
 #include "mvObjLoader.h"
 #include "mvMesh.h"
+#include "mvSimpleStructs.h"
 
+//simple rect object that allows scaling and translation of mesh
+//inherits object class
 class mvRect : public mvObject
 {
 public:
 	mvRect(const char *filename = NULL);
 	~mvRect();
-
-	mvMesh getMesh();
 	
+	//allow scaling and translation of mesh
 	void scale(double x, double y, double z);
 	void translate(double x, double y, double z);
 };
 
-#endif //MVCUBE
+#endif //MVRECT

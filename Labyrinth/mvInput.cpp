@@ -18,6 +18,7 @@ void mvInput::handleMouseFunc(int button, int state, int x, int y, mvMouseData m
 	{
 		if(state == GLUT_DOWN)
 		{
+			//if left mouse down initialize position and theda, phi
 			lMouse = MOUSE_DOWN;
 			init_x = x;
 			init_y = y;
@@ -36,6 +37,7 @@ bool mvInput::handleMouseMotionFunc(int x, int y, mvMouseData &mouseOutput)
 {
 	if(lMouse == MOUSE_DOWN)
 	{
+		//if left mouse is down set theda and phi base on motion of mouse from initial position
 		mouseOutput.theda = init_theda + (init_y - y)/15.0;
 		mouseOutput.phi = init_phi + (x - init_x)/15.0;
 		return true;
@@ -47,18 +49,21 @@ void mvInput::handleKeyboardFunc(unsigned char key, mvKeyboardData keyboardInput
 {
 	if(keyboardInput.keyState == KEY_DOWN)
 	{
-		if(key == 27)//ESC
+		//exit on esc
+		if(key == 27)
 		{
 			//clean up
 			exit(0);
 		}
 		else
 		{
+			//set key to being pressed
 			keyStates[key].setPressed(true);
 		}
 	}
 	else if(keyboardInput.keyState == KEY_UP)
 	{
+		//set key to not being pressed
 		keyStates[key].setPressed(false);
 	}
 }
@@ -67,20 +72,24 @@ void mvInput::handleSpecialFunc(int key, mvKeyboardData keyboardInput)
 {
 	if(keyboardInput.keyState == KEY_DOWN)
 	{
+		//set special key to being pressed
 		specialStates[key].setPressed(true);
 	}
 	else if(keyboardInput.keyState == KEY_UP)
 	{
+		//set special key to not being pressed
 		specialStates[key].setPressed(false);
 	}
 }
 	
 double mvInput::timeKeyDown(unsigned char key)
 {
+	//get length of time key was/is down
 	return keyStates[key].timeDown();
 }
 
 double mvInput::timeSpecialDown(int key)
 {
+	//get length of time special key was/is down
 	return specialStates[key].timeDown();
 }

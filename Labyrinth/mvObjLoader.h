@@ -6,6 +6,8 @@
 
 #include "mvMesh.h"
 
+//very simple obj loader
+//currently does not handle textures
 class mvObjLoader
 {
 public:

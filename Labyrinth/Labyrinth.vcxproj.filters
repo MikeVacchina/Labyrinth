@@ -21,9 +21,6 @@
     <ClCompile Include="mvObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mvCube.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="framework_labyrinth.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -83,9 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mvObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mvCube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="framework_labyrinth.h">

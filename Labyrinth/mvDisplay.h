@@ -17,15 +17,12 @@
 
 #include "defines.h"
 
-#include "mvInput.h"
 #include "mvShader.h"
 #include "mvSimpleStructs.h"
 #include "mvObject.h"
 #include "mvRect.h"
 #include "mvMaze.h"
-#include "mvTime.h"
 #include "mvSphere.h"
-#include "mvPhysics.h"
 
 class mvDisplay
 {
@@ -35,7 +32,10 @@ public:
 	
 	void initializeDisplay(std::string windowName, int w, int h);
 	bool initializeDisplayResources();
+
+	//display objects
 	void display();
+
 	void reshape(int newWidth, int newHeight);
 
 	void setMazeModelMat(glm::mat4 m);
@@ -48,8 +48,6 @@ private:
 	void objectBufferInit(mvObject &object);
 	
 	void displayObject(mvObject &object);
-
-	mvTime stopwatch;
 	
 	int width, height;
 
@@ -65,10 +63,9 @@ private:
 	glm::mat4 view;//world->eye
 	glm::mat4 projection;//eye->clip
 
+	//objects
 	mvMaze maze;
 	mvSphere sphere;
-
-	double phi, theda;
 };
 
 #endif //MVDISPLAY

@@ -10,9 +10,16 @@ public:
 	mvTime();
 	~mvTime();
 
+	//start timer
 	void startTime();
+
+	//reset time and return elapse time
 	double resetTime();
+
+	//return elapse time
 	double lapTime();
+
+	//stop timer and return elapse time
 	double stopTime();
 
 private:

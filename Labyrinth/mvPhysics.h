@@ -10,13 +10,12 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-
-#include "mvSimpleStructs.h"
-
 #include <vector>
 
 #include "mvMath.h"
 #include "mvObject.h"
+
+#include "mvSimpleStructs.h"
 
 class mvPhysics
 {
@@ -25,10 +24,13 @@ public:
 
 	~mvPhysics();
 
+	//sets the gravity
 	void setGravity(glm::vec3 g);
 
+	//sets all objects
 	void setObjs(std::vector<mvObject*> o);
 
+	//updates the physics and position of objects
 	void update(double deltaTime);
 	
 private:

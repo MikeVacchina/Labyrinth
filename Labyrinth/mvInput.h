@@ -9,10 +9,9 @@
 
 #include "mvKey.h"
 
-#include <iostream>
-
 #include "mvSimpleStructs.h"
 
+//this class handles user input throught the mouse and keyboard
 class mvInput
 {
 public:

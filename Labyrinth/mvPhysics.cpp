@@ -28,7 +28,7 @@ void mvPhysics::update(double deltaTime)
 	{
 		A = objs[i]->acc + gravity;
 
-		//check for normal forces and if their is some do not allow acceleration along that force
+		//check for normal forces and if there is some do not allow acceleration along that force
 		for(int j=0,sizej=objs[i]->normalForces.size();j<sizej;++j)
 		{
 			if(glm::dot(A, objs[i]->normalForces[j]) < 0)
@@ -45,6 +45,7 @@ void mvPhysics::update(double deltaTime)
 			}
 		}
 
+		//update velocity and position
 		objs[i]->vel += T * A;
 		objs[i]->pos += T * objs[i]->vel;
 

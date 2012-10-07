@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 
+//shader loading class
 class mvShader
 {
 public:

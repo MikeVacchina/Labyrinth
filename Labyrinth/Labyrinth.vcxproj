@@ -66,7 +66,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mvCircle.cpp" />
     <ClCompile Include="mvCollision.cpp" />
-    <ClCompile Include="mvCube.cpp" />
     <ClCompile Include="mvDisplay.cpp" />
     <ClCompile Include="mvInput.cpp" />
     <ClCompile Include="mvKey.cpp" />
@@ -91,7 +90,6 @@
     <ClInclude Include="framework_labyrinth.h" />
     <ClInclude Include="mvCircle.h" />
     <ClInclude Include="mvCollision.h" />
-    <ClInclude Include="mvCube.h" />
     <ClInclude Include="mvDisplay.h" />
     <ClInclude Include="mvInput.h" />
     <ClInclude Include="mvKey.h" />

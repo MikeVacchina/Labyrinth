@@ -6,12 +6,14 @@
 
 #include "defines.h"
 
+//basic vertex structure for glut
 struct mvVertex
 {
     GLfloat position[3];
     GLfloat color[3];
 };
 
+//mouse data to pass things from framework to input and vice versa
 class mvMouseData
 {
 public:
@@ -25,6 +27,7 @@ public:
 	double phi;
 };
 
+//keyboard data to pass things from framework to input and vice versa
 class mvKeyboardData
 {
 public:
@@ -36,6 +39,7 @@ public:
 	int keyState;
 };
 
+//simple vec3 used in mesh for vertices
 class vec3
 {
 public:
@@ -69,6 +73,8 @@ public:
 	double x, y, z;
 };
 
+//single axis wall that would be paired with 
+//another single axis wall of the other axis
 class mvWall
 {
 public:
@@ -88,23 +94,11 @@ public:
 	int id;
 };
 
+//simple hole structure with position and radius
 class mvHole
 {
 public:
 	mvHole(double _x=0.0, double _z=0.0, double _r=0.0)
-	{
-		x = _x;
-		z = _z;
-		r = _r;
-	}
-
-	double x, z, r;
-};
-
-class mvGoal
-{
-public:
-	mvGoal(double _x=0.0, double _z=0.0, double _r=0.0)
 	{
 		x = _x;
 		z = _z;

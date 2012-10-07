@@ -1,11 +1,9 @@
 #include "mvTime.h"
 
-
 mvTime::mvTime()
 {
 	started=false;
 }
-
 
 mvTime::~mvTime()
 {
@@ -48,4 +46,6 @@ double mvTime::stopTime()
 		started = false;
 		return double(t2-t1)/CLOCKS_PER_SEC;
 	}
+
+	return -1.0;
 }

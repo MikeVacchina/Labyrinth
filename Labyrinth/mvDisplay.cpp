@@ -6,8 +6,6 @@ mvDisplay::mvDisplay()
 	width = 640;
 	height = 480;
 
-	//maze needs to be loaded from file
-	//and needs to be able to change after program is running
 	//maze.setSize(10,10);
 	//maze.setWall(4.75, 0, 0.5, 10);
 	//maze.setWall(-4.75, 0, 0.5, 10);
@@ -15,8 +13,10 @@ mvDisplay::mvDisplay()
 	//maze.setWall(0, -4.75, 9, 0.5);
 	//maze.init();
 
+	//load maze object
 	maze.loadMaze("maze.mv");
 
+	//load sphere object and translate/scale mesh
 	sphere.loadMesh("sphere.obj");
 	sphere.setColor(1.0,1.0,0.0);
 	double r = 0.5/sphere.getMeshRadius();
@@ -43,14 +43,18 @@ void mvDisplay::initializeDisplay(std::string windowName, int w, int h)
 
 bool mvDisplay::initializeDisplayResources()
 {
+	//initialize objects
 	objectBufferInit(maze);
 	objectBufferInit(sphere);
 
+	//create shaders
 	GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 	
+	//load shader
 	mvShader vs("VertexShader.txt");
 
+	//check shader status
 	if(!vs.isShaderRdy())
     {
         std::cerr << "[ERROR] VERTEXSHADER NOT LOADED: ";
@@ -58,8 +62,10 @@ bool mvDisplay::initializeDisplayResources()
         return false;
     }
 
+	//load shader
 	mvShader fs("FragShader.txt");
 
+	//check shader status
 	if(!fs.isShaderRdy())
     {
         std::cerr << "[ERROR] VERTEXSHADER NOT LOADED: ";
@@ -67,6 +73,7 @@ bool mvDisplay::initializeDisplayResources()
         return false;
     }
 	
+	//convert to const char for glut
 	const char *vs_c_str = vs.getShaderString();
 	const char *fs_c_str = fs.getShaderString();
 	
@@ -154,8 +161,6 @@ bool mvDisplay::initializeDisplayResources()
     //enable depth testing
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-	stopwatch.startTime();
-    //and its done
     return true;
 }
 
@@ -165,6 +170,7 @@ void mvDisplay::display()
     glClearColor(0.0, 0.0, 0.2f, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+	//display objects
 	displayObject(maze);
 	displayObject(sphere);
 
@@ -205,6 +211,7 @@ mvSphere* mvDisplay::getSphere()
 
 void mvDisplay::objectBufferInit(mvObject &object)
 {
+	//set object buffers
 	glGenBuffers(1, &object.vbo_geometry);
 	glBindBuffer(GL_ARRAY_BUFFER, object.vbo_geometry);
 	glBufferData(GL_ARRAY_BUFFER, object.sizeofgeometry(), object.geometry, GL_STATIC_DRAW);
