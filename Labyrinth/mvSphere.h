@@ -24,8 +24,6 @@ public:
 
 	void loadMesh(const char *filename);
 
-	void setColor(double r, double g, double b);
-
 	mvMesh getMesh();
 	
 	void scale(double s);
@@ -35,7 +33,6 @@ public:
 	void getMeshCenter(double &x, double &y, double &z);
 
 private:
-	mvMesh mesh;
 	double radius;
 	double centerX, centerY, centerZ;
 };

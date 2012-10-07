@@ -36,23 +36,19 @@ public:
 	void initializeDisplay(std::string windowName, int w, int h);
 	bool initializeDisplayResources();
 	void display();
-	void updateDisplay();
 	void reshape(int newWidth, int newHeight);
 
-	void setTheda(double t);
-	void setPhi(double p);
-	double getTheda();
-	double getPhi();
+	void setMazeModelMat(glm::mat4 m);
+	void setBallModelMat(glm::mat4 m);
 
-	void setUserInput(mvInput *input);
+	mvMaze* getMaze();
+	mvSphere* getSphere();
 
 private:
 	void objectBufferInit(mvObject &object);
 	
 	void displayObject(mvObject &object);
 
-	mvInput *userInput;
-	mvPhysics physics;
 	mvTime stopwatch;
 	
 	int width, height;

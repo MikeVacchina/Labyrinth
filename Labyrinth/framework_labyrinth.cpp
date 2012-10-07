@@ -14,6 +14,8 @@ extern void startGlut()
 
 framework_labyrinth::framework_labyrinth()
 {
+	theda = 0.0;
+	phi = 0.0;
 }
 
 framework_labyrinth* framework_labyrinth::instance()
@@ -45,8 +47,21 @@ bool framework_labyrinth::initialize(std::string windowName, int windowWidth, in
 	//initialize resources
 	if(!display.initializeDisplayResources())
 		return false;
+
+	//set objects pointers in collision and physics?
+
+	mvMaze *m = display.getMaze();
+	mvSphere *b = display.getSphere();
+
+	b->pos = m->getBegin();
 	
-	display.setUserInput(&userInput);
+	objs.push_back(dynamic_cast<mvObject*>(m));
+	objs.push_back(dynamic_cast<mvObject*>(b));
+
+	physics.setObjs(objs);
+
+	collision.setMaze(m);
+	collision.setBall(b);
 
 	stopwatch.startTime();
 	return true;
@@ -97,7 +112,7 @@ void framework_labyrinth::specialUpFunc(int key, int x, int y)
 
 void framework_labyrinth::mouseFunc(int button, int state, int x, int y)
 {
-	userInput.handleMouseFunc(button, state, x, y, mvMouseData(display.getTheda(), display.getPhi()));
+	userInput.handleMouseFunc(button, state, x, y, mvMouseData(theda,phi));
 }
 
 void framework_labyrinth::motionFunc(int x, int y)
@@ -105,14 +120,71 @@ void framework_labyrinth::motionFunc(int x, int y)
 	mvMouseData mouseOutput;
 	if(userInput.handleMouseMotionFunc(x, y, mouseOutput))
 	{
-		display.setTheda(mouseOutput.theda);
-		display.setPhi(mouseOutput.phi);
+		setTheda(mouseOutput.theda);
+		setPhi(mouseOutput.phi);
 	}
 }
 
 void framework_labyrinth::idleFunc()
 {
 	//update object pos from input
+	//updateObjFromInput();
+	glm::mat4 rotationTheda;
+	glm::mat4 rotationPhi;
+	glm::mat4 mm;//mazeModel
+
+	glm::vec4 phiAxis(0.0,0.0,1.0,0.0);
+
+	double keyRotationRate = 30.0;
+	
+	double deltaThedaTime=0.0;
+	double deltaPhiTime=0.0;
+	
+	deltaPhiTime -= userInput.timeKeyDown('a');
+	deltaPhiTime += userInput.timeKeyDown('d');
+	deltaPhiTime -= userInput.timeSpecialDown(GLUT_KEY_LEFT);
+	deltaPhiTime += userInput.timeSpecialDown(GLUT_KEY_RIGHT);
+
+	setPhi(phi + deltaPhiTime * keyRotationRate);
+	
+	deltaThedaTime -= userInput.timeKeyDown('s');
+	deltaThedaTime += userInput.timeKeyDown('w');
+	deltaThedaTime -= userInput.timeSpecialDown(GLUT_KEY_DOWN);
+	deltaThedaTime += userInput.timeSpecialDown(GLUT_KEY_UP);
+
+	setTheda(theda + deltaThedaTime * keyRotationRate);
+	
+	rotationTheda = glm::rotate(glm::mat4(1.0f), (float)theda, glm::vec3(1.0,0.0,0.0));
+
+	phiAxis = rotationTheda*phiAxis;
+
+	rotationPhi = glm::rotate(glm::mat4(1.0f), (float)phi, glm::vec3(phiAxis.x, phiAxis.y, phiAxis.z));
+
+	mm = rotationTheda * rotationPhi;
+
+	display.setMazeModelMat(mm);
+
+	//get gravity acceleration
+
+	glm::mat4 worldRotation = glm::inverse(mm);
+
+	glm::vec4 gravity(0.0,-9.8,0.0,0.0);
+
+	gravity = worldRotation*gravity;
+	
+	physics.setGravity(glm::vec3(gravity.x, 0.0, gravity.z));
+
+	//update physics for object
+	physics.update(stopwatch.resetTime());
+	
+	//get object references from display
+	//check collision based on those objects
+
+	collision.resolveCollisions();//need walls/holes/goal and sphere radius
+
+	glm::mat4 translation = glm::translate(glm::mat4(1.0f),objs[1]->pos);
+
+	display.setBallModelMat(mm * translation);
 
 	//physics update
 
@@ -120,9 +192,29 @@ void framework_labyrinth::idleFunc()
 
 	//update display
 
-	display.updateDisplay();
+	display.display();
 
     glutPostRedisplay();//call the display callback
+}
+
+void framework_labyrinth::setTheda(double t)
+{
+	if(t<-45.0)
+		theda = -45.0;
+	else if(t>45.0)
+		theda = 45.0;
+	else
+		theda = t;
+}
+
+void framework_labyrinth::setPhi(double p)
+{
+	if(p<-45.0)
+		phi = -45.0;
+	else if(p>45.0)
+		phi = 45.0;
+	else
+		phi = p;
 }
 
 extern void displayWrapperFunc()

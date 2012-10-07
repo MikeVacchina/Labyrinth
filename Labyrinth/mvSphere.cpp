@@ -23,7 +23,7 @@ void mvSphere::loadMesh(const char *filename)
 
 	if(error != "")
 	{
-        std::cerr << "[ERROR] cube.obj FAILED TO LOAD: ";
+        std::cerr << "[ERROR] " << filename << " FAILED TO LOAD: ";
 		std::cerr << error;
 		return;
 	}
@@ -50,12 +50,6 @@ void mvSphere::loadMesh(const char *filename)
 	centerX /= vertexCount;
 	centerY /= vertexCount;
 	centerZ /= vertexCount;
-}
-
-void mvSphere::setColor(double r, double g, double b)
-{
-	mesh.setColor(r, g, b);
-	geometry = mesh.getGeometry();
 }
 
 mvMesh mvSphere::getMesh()

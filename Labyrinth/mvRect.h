@@ -18,17 +18,10 @@ public:
 	mvRect(const char *filename = NULL);
 	~mvRect();
 
-	void loadMesh(const char *filename);
-
-	void setColor(double r, double g, double b);
-
 	mvMesh getMesh();
 	
 	void scale(double x, double y, double z);
 	void translate(double x, double y, double z);
-
-private:
-	mvMesh mesh;
 };
 
 #endif //MVCUBE

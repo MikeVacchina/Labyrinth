@@ -65,7 +65,6 @@ void mvInput::handleKeyboardFunc(unsigned char key, mvKeyboardData keyboardInput
 
 void mvInput::handleSpecialFunc(int key, mvKeyboardData keyboardInput)
 {
-	std::cout << key << '\n';
 	if(keyboardInput.keyState == KEY_DOWN)
 	{
 		specialStates[key].setPressed(true);

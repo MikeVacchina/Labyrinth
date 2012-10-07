@@ -88,5 +88,31 @@ public:
 	int id;
 };
 
+class mvHole
+{
+public:
+	mvHole(double _x=0.0, double _z=0.0, double _r=0.0)
+	{
+		x = _x;
+		z = _z;
+		r = _r;
+	}
+
+	double x, z, r;
+};
+
+class mvGoal
+{
+public:
+	mvGoal(double _x=0.0, double _z=0.0, double _r=0.0)
+	{
+		x = _x;
+		z = _z;
+		r = _r;
+	}
+
+	double x, z, r;
+};
+
 #endif //MVSIMPLESTRUCTS
 

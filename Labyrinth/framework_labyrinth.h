@@ -25,6 +25,8 @@
 #include "mvMaze.h"
 #include "mvTime.h"
 #include "mvDisplay.h"
+#include "mvPhysics.h"
+#include "mvCollision.h"
 
 #define M_PI        3.14159265358979323846264338327950288   /* pi */
 
@@ -54,10 +56,21 @@ private:
 	void motionFunc(int x, int y);
 	void idleFunc();
 
+	void setTheda(double t);
+	void setPhi(double p);
+
 	mvTime stopwatch;
 	mvDisplay display;
 
 	mvInput userInput;
+	mvPhysics physics;
+	mvCollision collision;
+
+	int startMenu;
+
+	std::vector<mvObject*> objs;
+
+	double theda, phi;
 	
 	static framework_labyrinth *__framework_labyrinth__;
 

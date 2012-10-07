@@ -8,7 +8,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 
+#include <iostream>
+#include <string>
+#include <vector>
+
 #include "mvSimpleStructs.h"
+#include "mvObjLoader.h"
 
 class mvObject
 {
@@ -22,7 +27,22 @@ public:
 	mvVertex *geometry;
 	int vertexCount;
 
+	virtual void loadMesh(const char *filename);
+
+	virtual mvMesh getMesh();
+
+	virtual void setColor(double r, double g, double b);
+
 	virtual int sizeofgeometry();
+	
+	glm::vec3 acc;
+	glm::vec3 vel;
+	glm::vec3 pos;
+
+	std::vector<glm::vec3> normalForces;
+
+protected:
+	mvMesh mesh;
 };
 
 #endif //MVOBJECT

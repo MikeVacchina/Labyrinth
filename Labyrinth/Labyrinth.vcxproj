@@ -64,6 +64,7 @@
   <ItemGroup>
     <ClCompile Include="framework_labyrinth.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mvCircle.cpp" />
     <ClCompile Include="mvCollision.cpp" />
     <ClCompile Include="mvCube.cpp" />
     <ClCompile Include="mvDisplay.cpp" />
@@ -88,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="defines.h" />
     <ClInclude Include="framework_labyrinth.h" />
+    <ClInclude Include="mvCircle.h" />
     <ClInclude Include="mvCollision.h" />
     <ClInclude Include="mvCube.h" />
     <ClInclude Include="mvDisplay.h" />

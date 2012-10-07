@@ -6,15 +6,16 @@ mvDisplay::mvDisplay()
 	width = 640;
 	height = 480;
 
-	theda = 0.0;
-	phi = 0.0;
+	//maze needs to be loaded from file
+	//and needs to be able to change after program is running
+	//maze.setSize(10,10);
+	//maze.setWall(4.75, 0, 0.5, 10);
+	//maze.setWall(-4.75, 0, 0.5, 10);
+	//maze.setWall(0, 4.75, 9, 0.5);
+	//maze.setWall(0, -4.75, 9, 0.5);
+	//maze.init();
 
-	maze.setSize(10,10);
-	maze.setWall(4.75, 0, 0.5, 10);
-	maze.setWall(-4.75, 0, 0.5, 10);
-	maze.setWall(0, 4.75, 9, 0.5);
-	maze.setWall(0, -4.75, 9, 0.5);
-	maze.init();
+	maze.loadMaze("maze.mv");
 
 	sphere.loadMesh("sphere.obj");
 	sphere.setColor(1.0,1.0,0.0);
@@ -22,11 +23,6 @@ mvDisplay::mvDisplay()
 	sphere.scale(r);
 	r = sphere.getMeshRadius();
 	sphere.translate(0.0,r,0.0);
-
-	physics.setPos(glm::vec3(0.0,0.0,0.0));
-	physics.setVel(glm::vec3(0.0,0.0,0.0));
-
-	userInput = NULL;
 }
 
 
@@ -166,7 +162,7 @@ bool mvDisplay::initializeDisplayResources()
 void mvDisplay::display()
 {
     //clear the screen
-    glClearColor(0.0, 0.0, 0.2, 1.0);
+    glClearColor(0.0, 0.0, 0.2f, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	displayObject(maze);
@@ -174,57 +170,6 @@ void mvDisplay::display()
 
     //swap the buffers
     glutSwapBuffers();
-}
-
-void mvDisplay::updateDisplay()
-{
-	glm::mat4 rotationTheda;
-	glm::mat4 rotationPhi;
-
-	glm::vec4 phiAxis(0.0,0.0,1.0,0.0);
-
-	double keyRotationRate = 30.0;
-	
-	double deltaThedaTime=0.0;
-	double deltaPhiTime=0.0;
-	
-	deltaPhiTime -= userInput->timeKeyDown('a');
-	deltaPhiTime += userInput->timeKeyDown('d');
-	deltaPhiTime -= userInput->timeSpecialDown(GLUT_KEY_LEFT);
-	deltaPhiTime += userInput->timeSpecialDown(GLUT_KEY_RIGHT);
-
-	setPhi(phi + deltaPhiTime * keyRotationRate);
-	
-	deltaThedaTime -= userInput->timeKeyDown('s');
-	deltaThedaTime += userInput->timeKeyDown('w');
-	deltaThedaTime -= userInput->timeSpecialDown(GLUT_KEY_DOWN);
-	deltaThedaTime += userInput->timeSpecialDown(GLUT_KEY_UP);
-
-	setTheda(theda + deltaThedaTime * keyRotationRate);
-	
-	rotationTheda = glm::rotate(glm::mat4(1.0f), (float)theda, glm::vec3(1.0,0.0,0.0));
-
-	phiAxis = rotationTheda*phiAxis;
-
-	rotationPhi = glm::rotate(glm::mat4(1.0f), (float)phi, glm::vec3(phiAxis.x, phiAxis.y, phiAxis.z));
-
-	maze.model = rotationTheda * rotationPhi;
-
-	glm::mat4 worldRotation = glm::inverse(maze.model);
-
-	glm::vec4 gravity(0.0,-9.8,0.0,0.0);
-
-	gravity = worldRotation*gravity;
-	
-	physics.setAccel(glm::vec3(gravity.x, 0.0, gravity.z));
-
-	physics.update(stopwatch.resetTime());
-
-	physics.checkCollision(maze.xWalls, maze.zWalls,sphere.getMeshRadius());
-
-	glm::mat4 translation = glm::translate(glm::mat4(1.0f),physics.getPos());
-
-	sphere.model = maze.model * translation;
 }
 	
 void mvDisplay::reshape(int newWidth, int newHeight)
@@ -238,39 +183,24 @@ void mvDisplay::reshape(int newWidth, int newHeight)
     projection = glm::perspective(45.0f, float(width)/float(height), 0.01f, 100.0f);
 }
 
-void mvDisplay::setTheda(double t)
+void mvDisplay::setMazeModelMat(glm::mat4 m)
 {
-	if(t<-45.0)
-		theda = -45.0;
-	else if(t>45.0)
-		theda = 45.0;
-	else
-		theda = t;
+	maze.model = m;
 }
 
-void mvDisplay::setPhi(double p)
+void mvDisplay::setBallModelMat(glm::mat4 m)
 {
-	if(p<-45.0)
-		phi = -45.0;
-	else if(p>45.0)
-		phi = 45.0;
-	else
-		phi = p;
+	sphere.model = m;
 }
 
-double mvDisplay::getTheda()
+mvMaze* mvDisplay::getMaze()
 {
-	return theda;
+	return &maze;
 }
 
-double mvDisplay::getPhi()
+mvSphere* mvDisplay::getSphere()
 {
-	return phi;
-}
-
-void mvDisplay::setUserInput(mvInput *input)
-{
-	userInput = input;
+	return &sphere;
 }
 
 void mvDisplay::objectBufferInit(mvObject &object)
