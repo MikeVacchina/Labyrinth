@@ -36,6 +36,9 @@ void mvCollision::resolveCollisions()
 	std::map<int,std::pair<int,int> > walls;
 	std::set<int> intersections;
 
+	if(ball->falling)
+		return;
+
 	//check for a collision
 
 	//check if in goal
@@ -47,10 +50,21 @@ void mvCollision::resolveCollisions()
 	//check if on hole
 	for(int i=0,size=holes.size();i<size;++i)
 	{
-		if(sqrt((ball->pos.x - holes[i].x)*(ball->pos.x - holes[i].x) + (ball->pos.z - holes[i].z)*(ball->pos.z - holes[i].z)) < holes[i].r)
+		double holeTest = sqrt((ball->pos.x - holes[i].x)*(ball->pos.x - holes[i].x) + (ball->pos.z - holes[i].z)*(ball->pos.z - holes[i].z));
+		if(holeTest < holes[i].r)
 		{
+			//create a fall bounce to try and make the ball not go throught the floor a bit
+			glm::vec3 fallBounce(ball->pos.x - holes[i].x, 0.0, ball->pos.z - holes[i].z);
+
+			if(radius - (holes[i].r - holeTest) > 0)
+				fallBounce *= -3*(radius - (holes[i].r - holeTest));
+
+			ball->vel = fallBounce;
+
 			//fell into hole
 			std::cout << "fell into hole game over\n";
+			ball->acc.y = -9.8;
+			ball->falling = true;
 		}
 	}
 

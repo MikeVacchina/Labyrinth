@@ -116,12 +116,12 @@ std::vector<mvHole> mvMaze::getHoles()
 
 glm::vec3 mvMaze::getGoal()
 {
-	return glm::vec3(goal.pos.x, goal.pos.z, goal.radius);
+	return glm::vec3(goal.center.x, goal.center.z, goal.radius);
 }
 
 glm::vec3 mvMaze::getBegin()
 {
-	return begin;
+	return begin.center;
 }
 
 bool mvMaze::skipCommentLine(std::istream& is)
@@ -172,8 +172,8 @@ bool mvMaze::processLine(std::istream &is)
 		mvObject floor;
 		floor.loadMesh(tmp.c_str());
 
-		//set color to green
-		floor.setColor(0.0,1.0,0.0);
+		//set color to teal
+		floor.setColor(0.0,1.0,1.0);
 
 		//add mesh
 		mesh = floor.getMesh();
@@ -204,11 +204,19 @@ bool mvMaze::processLine(std::istream &is)
 	}
 	else if(ele == "b")//begin
 	{
-		float x, z;
-		is >> x >> z;
-		begin.x = x;
-		begin.y = 0;
-		begin.z = z;
+		std::string tmp;
+
+		//get filename
+		is >> tmp;
+
+		//load obj
+		begin.loadMesh(tmp.c_str());
+
+		//set color to green
+		begin.setColor(0.0,1.0,0.0);
+
+		//append mesh
+		mesh.addMesh(begin.getMesh());
 	}
 	else if(ele == "g")//goal
 	{

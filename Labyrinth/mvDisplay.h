@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <gl/glew.h> // glew must be included before the main gl libs
 #include <gl/glut.h> // doing otherwise causes compiler shouting
+#include <gl/GLU.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -23,6 +24,8 @@
 #include "mvRect.h"
 #include "mvMaze.h"
 #include "mvSphere.h"
+
+#include "mvText.h"
 
 class mvDisplay
 {

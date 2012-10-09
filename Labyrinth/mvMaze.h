@@ -58,7 +58,7 @@ private:
 
 	std::vector<mvHole> holes;
 
-	glm::vec3 begin;
+	mvCircle begin;
 	mvCircle goal;
 
 	bool skipCommentLine(std::istream& is);

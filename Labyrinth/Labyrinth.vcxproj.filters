@@ -45,9 +45,6 @@
     <ClCompile Include="mvInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mvSimpleStructs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mvTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -67,6 +64,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mvCircle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mvText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,6 +131,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mvCircle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mvText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

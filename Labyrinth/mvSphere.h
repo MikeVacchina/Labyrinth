@@ -3,6 +3,10 @@
 
 #include <iostream>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
+
 #include "mvObject.h"
 #include "mvObjLoader.h"
 #include "mvMesh.h"
@@ -30,9 +34,11 @@ public:
 	//return mesh center
 	void getMeshCenter(double &x, double &y, double &z);
 
+	bool falling;
+
 private:
 	double radius;
-	double centerX, centerY, centerZ;
+	glm::vec3 center;
 };
 
 #endif //MVSPHERE

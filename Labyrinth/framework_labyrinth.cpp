@@ -241,47 +241,47 @@ void framework_labyrinth::setPhi(double p)
 }
 
 //glut callback wrapper functions simply call corresponding functions in framework as glut is a c api
-extern void displayWrapperFunc()
+void displayWrapperFunc()
 {
 	framework_labyrinth::instance()->displayFunc();
 }
 
-extern void reshapeWrapperFunc(int newWidth, int newHeight)
+void reshapeWrapperFunc(int newWidth, int newHeight)
 {
 	framework_labyrinth::instance()->reshapeFunc(newWidth, newHeight);
 }
 
-extern void keyboardWrapperFunc(unsigned char key, int x, int y)
+void keyboardWrapperFunc(unsigned char key, int x, int y)
 {
 	framework_labyrinth::instance()->keyboardFunc(key, x, y);
 }
 
-extern void keyboardUpWrapperFunc(unsigned char key, int x, int y)
+void keyboardUpWrapperFunc(unsigned char key, int x, int y)
 {
 	framework_labyrinth::instance()->keyboardUpFunc(key, x, y);
 }
 
-extern void specialWrapperFunc(int key, int x, int y)
+void specialWrapperFunc(int key, int x, int y)
 {
 	framework_labyrinth::instance()->specialFunc(key, x, y);
 }
 
-extern void specialUpWrapperFunc(int key, int x, int y)
+void specialUpWrapperFunc(int key, int x, int y)
 {
 	framework_labyrinth::instance()->specialUpFunc(key, x, y);
 }
 
-extern void mouseWrapperFunc(int button, int state, int x, int y)
+void mouseWrapperFunc(int button, int state, int x, int y)
 {
 	framework_labyrinth::instance()->mouseFunc(button, state, x, y);
 }
 
-extern void motionWrapperFunc(int x, int y)
+void motionWrapperFunc(int x, int y)
 {
 	framework_labyrinth::instance()->motionFunc(x, y);
 }
 
-extern void idleWrapperFunc()
+void idleWrapperFunc()
 {
 	framework_labyrinth::instance()->idleFunc();
 }

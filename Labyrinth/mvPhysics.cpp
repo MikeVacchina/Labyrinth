@@ -11,7 +11,9 @@ mvPhysics::~mvPhysics()
 	
 void mvPhysics::setGravity(glm::vec3 g)
 {
-	gravity = g;
+	//TODO: slightly hacky fix later
+	gravity.x = g.x;
+	gravity.z = g.z;
 }
 
 void mvPhysics::setObjs(std::vector<mvObject*> o)

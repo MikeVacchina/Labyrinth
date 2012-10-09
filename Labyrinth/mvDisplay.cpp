@@ -6,15 +6,8 @@ mvDisplay::mvDisplay()
 	width = 640;
 	height = 480;
 
-	//maze.setSize(10,10);
-	//maze.setWall(4.75, 0, 0.5, 10);
-	//maze.setWall(-4.75, 0, 0.5, 10);
-	//maze.setWall(0, 4.75, 9, 0.5);
-	//maze.setWall(0, -4.75, 9, 0.5);
-	//maze.init();
-
 	//load maze object
-	maze.loadMaze("maze.mv");
+	maze.loadMaze("maze2.mv");
 
 	//load sphere object and translate/scale mesh
 	sphere.loadMesh("sphere.obj");
@@ -149,7 +142,7 @@ bool mvDisplay::initializeDisplayResources()
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 8.0, -16.0), //Eye Position
+    view = glm::lookAt( glm::vec3(0.0, 20.0, -10.0), //Eye Position glm::vec3(0.0, 8.0, -16.0
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
                         glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up
 
@@ -169,7 +162,7 @@ void mvDisplay::display()
     //clear the screen
     glClearColor(0.0, 0.0, 0.2f, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	//display objects
 	displayObject(maze);
 	displayObject(sphere);
@@ -183,7 +176,7 @@ void mvDisplay::reshape(int newWidth, int newHeight)
     width = newWidth;
     height = newHeight;
     //Change the viewport to be correct
-    glViewport( 0, 0, width, height);
+    glViewport( 1, 0, width, height);
     //Update the projection matrix as well
     //See the init function for an explaination
     projection = glm::perspective(45.0f, float(width)/float(height), 0.01f, 100.0f);

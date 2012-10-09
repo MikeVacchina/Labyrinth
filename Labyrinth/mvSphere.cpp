@@ -3,7 +3,8 @@
 mvSphere::mvSphere(const char *filename)
 {
 	radius = 0.0;
-	centerX = centerY = centerZ = 0.0;
+	center = glm::vec3(0.0);
+	falling = false;
 
 	if(filename)
 	{
@@ -38,29 +39,33 @@ void mvSphere::loadMesh(const char *filename)
 	
 	//reset radius and center
 	radius = 0.0;
-	centerX = centerY = centerZ = 0.0;
-	
-	//TODO: just noticed radius only works if center is 0,0,0 fix this some time
+	center = glm::vec3(0.0);
+
+	for(int i=0;i<vertexCount;++i)
+	{
+		//add up vertices for center
+		center.x += geometry[i].position[0];
+		center.y += geometry[i].position[1];
+		center.z += geometry[i].position[2];
+	}
+
+	//average
+	center.x /= vertexCount;
+	center.y /= vertexCount;
+	center.z /= vertexCount;
+
 	for(int i=0;i<vertexCount;++i)
 	{
 		//add up distances for radius
-		double tmp=0.0;
-		for(int j=0;j<3;++j)
-			tmp += geometry[i].position[j]*geometry[i].position[j];
+		double tmp = (geometry[i].position[0]-center.x)*(geometry[i].position[0]-center.x) +
+					 (geometry[i].position[1]-center.y)*(geometry[i].position[1]-center.y) +
+					 (geometry[i].position[2]-center.z)*(geometry[i].position[2]-center.z);
 		tmp = sqrt(tmp);
 		radius += tmp;
-		
-		//add up vertices for center
-		centerX += geometry[i].position[0];
-		centerY += geometry[i].position[1];
-		centerZ += geometry[i].position[2];
 	}
 
 	//average
 	radius /= vertexCount;
-	centerX /= vertexCount;
-	centerY /= vertexCount;
-	centerZ /= vertexCount;
 }
 	
 void mvSphere::scale(double s)
@@ -72,9 +77,9 @@ void mvSphere::scale(double s)
 	radius *= s;
 
 	//scale center
-	centerX *= s;
-	centerY *= s;
-	centerZ *= s;
+	center.x *= float(s);
+	center.y *= float(s);
+	center.z *= float(s);
 
 	//reload geometry and vertex count
 	geometry = mesh.getGeometry();
@@ -87,9 +92,9 @@ void mvSphere::translate(double x, double y, double z)
 	mesh.translate(vec3(x,y,z));
 
 	//translate center
-	centerX += x;
-	centerY += y;
-	centerZ += z;
+	center.x += float(x);
+	center.y += float(y);
+	center.z += float(z);
 
 	//reload geometry and vertex count
 	geometry = mesh.getGeometry();
@@ -105,7 +110,7 @@ double mvSphere::getMeshRadius()
 void mvSphere::getMeshCenter(double &x, double &y, double &z)
 {
 	//return mesh center
-	x = centerX;
-	y = centerY;
-	z = centerZ;
+	x = center.x;
+	y = center.y;
+	z = center.z;
 }
