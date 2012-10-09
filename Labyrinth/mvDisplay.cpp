@@ -176,7 +176,7 @@ void mvDisplay::reshape(int newWidth, int newHeight)
     width = newWidth;
     height = newHeight;
     //Change the viewport to be correct
-    glViewport( 1, 0, width, height);
+    glViewport( 0, 0, width, height);
     //Update the projection matrix as well
     //See the init function for an explaination
     projection = glm::perspective(45.0f, float(width)/float(height), 0.01f, 100.0f);
