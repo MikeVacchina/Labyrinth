@@ -34,6 +34,8 @@ public:
 	//return mesh center
 	void getMeshCenter(double &x, double &y, double &z);
 
+	//indicator of the ball falling so collisions no longer happen
+	//since collision are done in 2D
 	bool falling;
 
 private:

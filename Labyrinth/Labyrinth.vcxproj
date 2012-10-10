@@ -78,7 +78,6 @@
     <ClCompile Include="mvRect.cpp" />
     <ClCompile Include="mvShader.cpp" />
     <ClCompile Include="mvSphere.cpp" />
-    <ClCompile Include="mvText.cpp" />
     <ClCompile Include="mvTime.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -103,7 +102,6 @@
     <ClInclude Include="mvShader.h" />
     <ClInclude Include="mvSimpleStructs.h" />
     <ClInclude Include="mvSphere.h" />
-    <ClInclude Include="mvText.h" />
     <ClInclude Include="mvTime.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

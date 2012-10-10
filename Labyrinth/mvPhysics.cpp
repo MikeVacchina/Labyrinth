@@ -38,12 +38,17 @@ void mvPhysics::update(double deltaTime)
 		//check for normal forces and if there is some do not allow acceleration along that force
 		for(int j=0,sizej=objs[i]->normalForces.size();j<sizej;++j)
 		{
+			//check if acceleration goes against normal force
 			if(glm::dot(A, objs[i]->normalForces[j]) < 0)
 			{
+				//remove normal force direction from acceleration
 				glm::vec3 c = glm::cross(A, objs[i]->normalForces[j]);
 				glm::vec3 nA = glm::cross(objs[i]->normalForces[j], c);
+
+				//make sure new accerleration isn't 0 before rescaling
 				if(nA != glm::vec3(0.0))
 				{
+					//rescale new acceleration to proper length
 					double s = glm::dot(A, nA) / nA.length();
 					nA = glm::normalize(nA);
 					nA *= s;

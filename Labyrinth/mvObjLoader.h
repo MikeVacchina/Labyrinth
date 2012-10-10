@@ -7,7 +7,7 @@
 #include "mvMesh.h"
 
 //very simple obj loader
-//currently does not handle textures
+//currently does not handle textures or anything but vertices and triangle faces
 class mvObjLoader
 {
 public:

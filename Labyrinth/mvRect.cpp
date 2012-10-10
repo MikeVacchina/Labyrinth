@@ -2,6 +2,7 @@
 
 mvRect::mvRect(const char *filename)
 {
+	//load file if there
 	if(filename)
 	{
 		loadMesh(filename);

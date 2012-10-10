@@ -85,6 +85,7 @@ void mvMaze::setWall(double x, double z, double w, double d)
 
 void mvMaze::setHole(double x, double z, double r)
 {
+	//add hole
 	holes.push_back(mvHole(x, z, r));
 }
 

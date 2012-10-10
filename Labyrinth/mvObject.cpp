@@ -3,6 +3,7 @@
 
 mvObject::mvObject()
 {
+	//set default values
 	geometry = NULL;
 	vertexCount = 0;
 	

@@ -29,9 +29,10 @@
 #include "mvSphere.h"
 #include "mvMaze.h"
 
+//M_PI does not appear to be defined when I build the project in visual studios
 #define M_PI        3.14159265358979323846264338327950288   /* pi */
 
-//Initialize/Start Glut Functions
+//Initialize/Start Glut Functions (wrappers basically)
 extern void initializeGlut(int argc, char **argv);
 extern void startGlut();
 
@@ -52,6 +53,8 @@ private:
 	framework_labyrinth();
 
 	void initializeCallbacks();
+
+	void createMenus();
 
 	//framework function callbacks
 	void displayFunc();
@@ -85,6 +88,7 @@ private:
 	//collision handler
 	mvCollision collision;
 	
+	//menu ids
 	int menu;
 	int settingsMenu;
 
@@ -115,7 +119,7 @@ private:
 	friend void subMenuWrapperFunc(int option);
 };
 
-//callbacks for glut which call framework funcs
+//callbacks for glut which call framework funcs (wrappers)
 extern void displayWrapperFunc();
 extern void reshapeWrapperFunc(int newWidth, int newHeight);
 extern void keyboardWrapperFunc(unsigned char key, int x, int y);

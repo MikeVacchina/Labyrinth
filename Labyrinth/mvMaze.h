@@ -61,6 +61,7 @@ private:
 	mvCircle begin;
 	mvCircle goal;
 
+	//helper functions to load special maze file
 	bool skipCommentLine(std::istream& is);
 	void skipLine(std::istream &is);
 	bool processLine(std::istream &is);

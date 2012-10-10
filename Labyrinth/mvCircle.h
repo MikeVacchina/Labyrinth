@@ -20,8 +20,12 @@ public:
 	~mvCircle();
 
 	//reimplement loadMesh
+	//TODO: this is an exact copy of the function in mvSphere
+	//obviously that probably shouldn't happen
 	void loadMesh(const char *filename);
 
+	//public center and radius for now
+	//TODO: also same as mvSphere
 	glm::vec3 center;
 	double radius;
 };

@@ -2,10 +2,12 @@
 
 mvSphere::mvSphere(const char *filename)
 {
+	//set default values
 	radius = 0.0;
 	center = glm::vec3(0.0);
 	falling = false;
 
+	//load file if there
 	if(filename)
 	{
 		loadMesh(filename);

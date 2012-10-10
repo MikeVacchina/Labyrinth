@@ -3,7 +3,10 @@
 
 mvShader::mvShader(char *filename)
 {
+	//set default values
 	shaderRdy = false;
+
+	//load file if there
 	if(filename)
 		loadShader(filename);
 }
@@ -16,8 +19,11 @@ void mvShader::loadShader(char* filename)
 {
 	int len;
 
+	//open file as ASCII
 	std::ifstream file;
-	file.open(filename, std::ios::in); // opens as ASCII
+	file.open(filename, std::ios::in); 
+
+	//check if opened
 	if(!file)
 	{
 		shaderRdy = false;
@@ -27,15 +33,18 @@ void mvShader::loadShader(char* filename)
 
 	char *ShaderSource=NULL;
 
+	//get length of data
 	len = getFileLength(file);
     
-	if (len==0) // Error: Empty File 
+	//check if file is empty
+	if (len==0)
 	{
 		shaderRdy = false;
 		error = "[ERROR] FILE IS EMPTY!";
 		return;
 	}
     
+	//allocate memory
 	ShaderSource = new char[len+1];
 	if (ShaderSource == 0) // can't reserve memory
 	{
@@ -51,12 +60,14 @@ void mvShader::loadShader(char* filename)
 	unsigned int i=0;
 	while (file.good())
 	{
-		ShaderSource[i] = file.get(); // get character from file.
+		// get character from file
+		ShaderSource[i] = file.get(); 
 		if (!file.eof())
-		i++;
+			i++;
 	}
     
-	ShaderSource[i] = 0; // 0-terminate it at the correct position
+	// 0-terminate it at the correct position
+	ShaderSource[i] = 0;
     
 	file.close();
 
@@ -84,8 +95,10 @@ std::string mvShader::getError()
 /// This function is courtesy of the interwebz at http://www.opengl.org/sdk/docs/tutorials/ClockworkCoders/loading.php
 unsigned long mvShader::getFileLength(std::ifstream& file)
 {
+	//make sure file is open
 	if(!file.good()) return 0;
     
+	//get size of data in file
 	unsigned long pos=file.tellg();
 	file.seekg(0,std::ios::end);
 	unsigned long len = file.tellg();

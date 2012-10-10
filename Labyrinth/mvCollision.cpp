@@ -3,9 +3,11 @@
 
 mvCollision::mvCollision()
 {
+	//set default values
 	maze = NULL;
 	ball = NULL;
 
+	radius = 0.0;
 	bouncyness = 0.5;
 }
 
@@ -16,7 +18,9 @@ mvCollision::~mvCollision()
 
 void mvCollision::setMaze(mvMaze *m)
 {
+	//set maze reference
 	maze = m;
+	//get objects in maze
 	xWalls = maze->getXWalls();
 	zWalls = maze->getZWalls();
 	holes = maze->getHoles();
@@ -25,13 +29,17 @@ void mvCollision::setMaze(mvMaze *m)
 
 void mvCollision::setBall(mvSphere *b)
 {
+	//set ball reference
 	ball = b;
+	//get ball's radius
 	radius = ball->getMeshRadius();
 }
 
 void mvCollision::clearMaze()
 {
+	//clear maze reference
 	maze = NULL;
+	//clear objects in maze
 	xWalls.clear();
 	zWalls.clear();
 	holes.clear();
@@ -40,7 +48,11 @@ void mvCollision::clearMaze()
 
 void mvCollision::clearBall()
 {
+	//clear ball reference
 	ball = NULL;
+	//return radius to default
+	radius = 0.0;
+
 }
 
 //TODO: currently function is ugly 
@@ -49,9 +61,11 @@ void mvCollision::clearBall()
 //followed by collision response
 int mvCollision::resolveCollisions()
 {
+	//if ball or maze refernces not set return invalid
 	if(ball == NULL || maze == NULL)
 		return INVALID;
 
+	//flag for if the ball is in goal
 	bool reachedGoal=false;
 
 	std::set<int> xWallsSet;
@@ -59,6 +73,7 @@ int mvCollision::resolveCollisions()
 	std::map<int,std::pair<int,int> > walls;
 	std::set<int> intersections;
 
+	//if falling do nothing
 	if(ball->falling)
 		return HOLE;
 
@@ -67,7 +82,10 @@ int mvCollision::resolveCollisions()
 	//check if in goal
 	if(sqrt((ball->pos.x - goal.x)*(ball->pos.x - goal.x) + (ball->pos.z - goal.y)*(ball->pos.z - goal.y)) < goal.z)
 	{
+		//print output as it is the only way to know we reached the goal currently
 		std::cout << "goal reached game over\n";
+
+		//cannot return here as we still need collisions so set flag
 		reachedGoal = true;
 	}
 
@@ -82,14 +100,18 @@ int mvCollision::resolveCollisions()
 			//create a fall bounce to try and make the ball not go throught the floor a bit
 			glm::vec3 fallBounce(ball->pos.x - holes[i].x, 0.0, ball->pos.z - holes[i].z);
 
+			//scale bounce enough so that ball doesnt go through floor
 			if(radius - (holes[i].r - holeTest) > 0)
 				fallBounce *= -3*(radius - (holes[i].r - holeTest));
 
+			//set ball velocity
 			ball->vel = fallBounce;
 
+			//set falling gravity
 			ball->acc.y = -9.8f;
 			ball->falling = true;
 
+			//imform user of fall since we do not reset the ball for them
 			std::cout << "fell into hole game over\n";
 			return HOLE;
 		}
@@ -158,6 +180,8 @@ int mvCollision::resolveCollisions()
 			//currently do not do anything
 			//unless the computer sucks the ball should never move fast enough that in a time step it is suddenly in a wall
 				
+			//ignore this following commented out code as it is incomplete
+
 			//get line segment(s) it intersects with
 				//using commented out section below
 			//int segID = getIntersectingSegment(wallPts, glm::vec2(lP.x, lP.y),glm::vec2(P.x, P.y));
@@ -208,14 +232,17 @@ int mvCollision::resolveCollisions()
 			//radius of ball intersected a wall
 
 			//get the closest wall segment with the ball
+
+			//first segment is default closest
 			double dist =  radius - distanceLineSegPt(wallPts[0].first,wallPts[0].second,glm::vec2(ball->pos.x, ball->pos.z));
 
+			//keep track of the segment(s) that are closest
 			std::vector<int> intersectedSegments;
 			intersectedSegments.push_back(0);
 
 			for(int i=1;i<4;++i)
 			{
-				//get closest distance from center of sphere to each line segment 
+				//get distance from center of sphere to line segment 
 				double d = radius - distanceLineSegPt(wallPts[i].first,wallPts[i].second,glm::vec2(ball->pos.x, ball->pos.z));
 				
 				//biggest d will be closest since we are doing radius - distance
@@ -228,10 +255,12 @@ int mvCollision::resolveCollisions()
 				else if(d == dist)
 				{
 					//ball can be hitting two segments at same time...
+					//so add to tracked segments
 					intersectedSegments.push_back(i);
 				}
 			}
 
+			//check for valid distance
 			if(dist < 0)
 			{
 				//didnt actually collide
@@ -246,12 +275,14 @@ int mvCollision::resolveCollisions()
 			for(int i=0, size=intersectedSegments.size();i<size;++i)
 			{
 				glm::vec2 tmpNorm;
+				//get orthogonal vector to segment
 				tmpNorm.x = -1*(wallPts[intersectedSegments[i]].first.y - wallPts[intersectedSegments[i]].second.y);
 				tmpNorm.y = -1*(wallPts[intersectedSegments[i]].first.x - wallPts[intersectedSegments[i]].second.x);
 
+				//normalize vector
 				tmpNorm = glm::normalize(tmpNorm);
 
-				//determine the direction of the norm
+				//determine the direction of the normal
 				if(glm::dot(tmpNorm,wallPts[intersectedSegments[i]].first-glm::vec2(ball->pos.x,ball->pos.z)) > 0)
 					tmpNorm *= -1;
 
@@ -264,6 +295,8 @@ int mvCollision::resolveCollisions()
 
 			//average normals
 			norm /= (double)intersectedSegments.size();
+
+			//ensure it is normalized
 			norm = glm::normalize(norm);
 
 			//set offset to keep ball out of the walls
@@ -292,6 +325,7 @@ int mvCollision::resolveCollisions()
 		ball->vel = nV;
 	}
 
+	//return proper result
 	if(reachedGoal)
 		return GOAL;
 	return NONE;

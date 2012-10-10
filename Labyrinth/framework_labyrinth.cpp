@@ -15,6 +15,7 @@ extern void startGlut()
 
 framework_labyrinth::framework_labyrinth()
 {
+	//set default values
 	theda = 0.0;
 	phi = 0.0;
 
@@ -34,6 +35,7 @@ framework_labyrinth* framework_labyrinth::instance()
 
 bool framework_labyrinth::initialize(std::string windowName, int windowWidth, int windowHeight)
 {
+	//initialize display size and window name
 	display.initializeDisplay(windowName, windowWidth, windowHeight);
 
 	// Now that the window is created the GL context is fully set up
@@ -74,9 +76,14 @@ void framework_labyrinth::initializeCallbacks()
 	glutMouseFunc(mouseWrapperFunc);
 	glutMotionFunc(motionWrapperFunc);
 	glutIdleFunc(idleWrapperFunc);
+}
 
+void framework_labyrinth::createMenus()
+{
+	//create settings menu
 	settingsMenu = glutCreateMenu(subMenuWrapperFunc);
 	
+	//set settings menu options
 	glutAddMenuEntry("Increase Mouse Sensitivity", INCMOUSE);
 	glutAddMenuEntry("Decrease Mouse Sensitivity", DECMOUSE);
 	glutAddMenuEntry("Increase Key Sensitivity", INCKEY);
@@ -87,16 +94,18 @@ void framework_labyrinth::initializeCallbacks()
 	glutAddMenuEntry("Decrease Bounce", DECBOUNCE);
 	glutAddMenuEntry("Reset to Defaults", RESET);
 
+	//create main menu
 	menu = glutCreateMenu(menuWrapperFunc);
 	
+	//set main menu options
 	glutAddMenuEntry("Play Maze 1", PLAYMAZEONE);
 	glutAddMenuEntry("Play Maze 2", PLAYMAZETWO);
 	glutAddMenuEntry("Restart", RESTART);
 	glutAddSubMenu("Settings", settingsMenu);
 	glutAddMenuEntry("Quit", QUIT);
 
+	//attack main menu to right mouse button
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-
 }
 
 void framework_labyrinth::displayFunc()
@@ -156,6 +165,7 @@ void framework_labyrinth::motionFunc(int x, int y)
 
 void framework_labyrinth::idleFunc()
 {
+	//if user has not yet started a maze do nothing
 	if(!started)
 		return;
 
@@ -176,13 +186,16 @@ void framework_labyrinth::idleFunc()
 	deltaPhiTime -= userInput.timeSpecialDown(GLUT_KEY_LEFT);
 	deltaPhiTime += userInput.timeSpecialDown(GLUT_KEY_RIGHT);
 
+	//set phi based on time and key rotation variable
 	setPhi(phi + deltaPhiTime * keyRotationRate);
 	
+	//get time of each key down as there effect on maze orientation
 	deltaThedaTime -= userInput.timeKeyDown('s');
 	deltaThedaTime += userInput.timeKeyDown('w');
 	deltaThedaTime -= userInput.timeSpecialDown(GLUT_KEY_DOWN);
 	deltaThedaTime += userInput.timeSpecialDown(GLUT_KEY_UP);
-
+	
+	//set theda based on time and key rotation variable
 	setTheda(theda + deltaThedaTime * keyRotationRate);
 	
 	//create theda rotation matrix
@@ -241,62 +254,87 @@ void framework_labyrinth::menuFunc(int option)
 	switch(option)
 	{
 	case PLAYMAZEONE:
+		//reset maze orientation
 		setTheda(0.0);
 		setPhi(0.0);
+
+		//clear objects since the maze has changed
 		objs.clear();
 
+		//clear physics reference to the objects as well
 		physics.clearObjs();
+
+		//clear collisions reference to the objects as well
 		collision.clearBall();
 		collision.clearMaze();
 
+		//imform display of maze change
 		display.playMaze(1);
 
-		//set objects pointers in collision and physics objects
+		//get references to objects from display
 		m = display.getMaze();
 		b = display.getSphere();
-
+		
+		//set objects references in framework
 		objs.push_back(dynamic_cast<mvObject*>(m));
 		objs.push_back(dynamic_cast<mvObject*>(b));
-
+		
+		//set objects references in physics
 		physics.setObjs(objs);
-
+		
+		//set objects references in collision
 		collision.setMaze(m);
 		collision.setBall(b);
 
+		//the user has started to play
 		started = true;
 		break;
 	case PLAYMAZETWO:
+		//reset maze orientation
 		setTheda(0.0);
 		setPhi(0.0);
+		
+		//clear objects since the maze has changed
 		objs.clear();
-
+		
+		//clear physics reference to the objects as well
 		physics.clearObjs();
+		
+		//clear collisions reference to the objects as well
 		collision.clearBall();
 		collision.clearMaze();
-
+		
+		//imform display of maze change
 		display.playMaze(2);
-
-		//set objects pointers in collision and physics objects
+		
+		//get references to objects from display
 		m = display.getMaze();
 		b = display.getSphere();
-
+		
+		//set objects references in framework
 		objs.push_back(dynamic_cast<mvObject*>(m));
 		objs.push_back(dynamic_cast<mvObject*>(b));
-
+		
+		//set objects references in physics
 		physics.setObjs(objs);
-
+		
+		//set objects references in collision
 		collision.setMaze(m);
 		collision.setBall(b);
-
+		
+		//the user has started to play
 		started = true;
 		break;
 	case RESTART:
+		//reset maze orientation
 		setTheda(0.0);
 		setPhi(0.0);
 		
+		//get references to objects from display
 		m = display.getMaze();
 		b = display.getSphere();
 		
+		//reset balls values
 		b->falling = false;
 		b->acc = glm::vec3(0.0);
 		b->vel = glm::vec3(0.0);
@@ -304,6 +342,7 @@ void framework_labyrinth::menuFunc(int option)
 
 		break;
 	case QUIT:
+		//quit
 		exit(0);
 		break;
 	}
@@ -338,6 +377,7 @@ void framework_labyrinth::subMenuFunc(int option)
 		collision.bouncyness *= 0.8;
 		break;
 	case RESET:	
+		//reset all settings
 		userInput.resetMouseSensitivity();
 		keyRotationRate = 30.0;
 		gravityVar = -9.8;

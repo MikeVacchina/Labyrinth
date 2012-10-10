@@ -25,33 +25,44 @@
 #include "mvMaze.h"
 #include "mvSphere.h"
 
-#include "mvText.h"
-
 class mvDisplay
 {
 public:
 	mvDisplay();
 	~mvDisplay();
 	
+	//initialize size and name of window
 	void initializeDisplay(std::string windowName, int w, int h);
+
+	//initialize resources to be used for gl and glut
 	bool initializeDisplayResources();
 
 	//display objects
 	void display();
 
+	//reshape window
 	void reshape(int newWidth, int newHeight);
 
+	//set maze to be played
 	void playMaze(int mazeID);
 
+	//set maze model matrix
 	void setMazeModelMat(glm::mat4 m);
+
+	//set ball model matrix
 	void setBallModelMat(glm::mat4 m);
 
+	//return reference to maze
 	mvMaze* getMaze();
+	
+	//return reference to ball
 	mvSphere* getSphere();
 
 private:
+	//initialize the object for gl and glut
 	void objectBufferInit(mvObject &object);
 	
+	//display the object
 	void displayObject(mvObject &object);
 	
 	int width, height;
@@ -68,8 +79,10 @@ private:
 	glm::mat4 view;//world->eye
 	glm::mat4 projection;//eye->clip
 
+	//flag to know when to display objects
 	bool started;
 
+	//maze id
 	int maze;
 
 	//objects

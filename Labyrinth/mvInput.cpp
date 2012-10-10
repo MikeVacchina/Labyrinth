@@ -3,6 +3,7 @@
 
 mvInput::mvInput()
 {
+	//set default values
 	lMouse = MOUSE_INVALID;
 	rMouse = MOUSE_INVALID;
 
@@ -20,8 +21,10 @@ void mvInput::handleMouseFunc(int button, int state, int x, int y, mvMouseData m
 	{
 		if(state == GLUT_DOWN)
 		{
-			//if left mouse down initialize position and theda, phi
+			//set mouse state
 			lMouse = MOUSE_DOWN;
+
+			//initialize position and theda, phi
 			init_x = x;
 			init_y = y;
 			init_theda = mouseInput.theda;
@@ -29,6 +32,7 @@ void mvInput::handleMouseFunc(int button, int state, int x, int y, mvMouseData m
 		}
 		else if(state == GLUT_UP)
 		{
+			//set mouse state
 			lMouse = MOUSE_UP;
 		}
 	}
@@ -98,15 +102,18 @@ double mvInput::timeSpecialDown(int key)
 	
 void mvInput::increaseMouseSensitivity()
 {
+	//increase mouse sensitivity
 	mouseSensitivity *= 0.5;
 }
 
 void mvInput::decreaseMouseSensitivity()
 {
+	//decrease mouse sensitivity
 	mouseSensitivity *= 2.0;
 }
 
 void mvInput::resetMouseSensitivity()
 {
+	//reset mouse sensitivity
 	mouseSensitivity = 15.0;
 }

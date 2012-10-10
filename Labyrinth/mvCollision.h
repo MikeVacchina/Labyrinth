@@ -27,14 +27,18 @@ public:
 	mvCollision();
 	~mvCollision();
 	
+	//set a reference to objects in collision so they dont have to be passed in every call
 	void setMaze(mvMaze *m);
 	void setBall(mvSphere *b);
 
+	//clear references to objects
 	void clearMaze();
 	void clearBall();
 
+	//detect and resolve all collisions
 	int resolveCollisions();
 
+	//currently public bounciness value
 	float bouncyness;
 
 private:

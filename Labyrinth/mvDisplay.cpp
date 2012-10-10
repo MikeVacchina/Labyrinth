@@ -3,10 +3,13 @@
 
 mvDisplay::mvDisplay()
 {
+	//set default values
 	width = 640;
 	height = 480;
 
-	////load maze object
+	started = false;
+
+	//load maze objects
 	maze1.loadMaze("maze1.mv");
 	maze2.loadMaze("maze2.mv");
 
@@ -17,8 +20,6 @@ mvDisplay::mvDisplay()
 	sphere.scale(r);
 	r = sphere.getMeshRadius();
 	sphere.translate(0.0,r,0.0);
-
-	started = false;
 }
 
 
@@ -146,7 +147,7 @@ bool mvDisplay::initializeDisplayResources()
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 20.0, -10.0), //Eye Position glm::vec3(0.0, 8.0, -16.0
+    view = glm::lookAt( glm::vec3(0.0, 20.0, -10.0), //Eye Position - old eye position: glm::vec3(0.0, 8.0, -16.0)
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
                         glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up
 
@@ -194,11 +195,12 @@ void mvDisplay::reshape(int newWidth, int newHeight)
 
 void mvDisplay::playMaze(int mazeID)
 {
-	//load maze object
+	//set maze id
 	maze = mazeID;
 	
 	if(maze==1)
 	{
+		//reset ball position and motion
 		sphere.falling = false;
 		sphere.acc = glm::vec3(0.0);
 		sphere.vel = glm::vec3(0.0);
@@ -206,6 +208,7 @@ void mvDisplay::playMaze(int mazeID)
 	}
 	else if(maze==2)
 	{
+		//reset ball position and motion
 		sphere.falling = false;
 		sphere.acc = glm::vec3(0.0);
 		sphere.vel = glm::vec3(0.0);
@@ -217,6 +220,7 @@ void mvDisplay::playMaze(int mazeID)
 
 void mvDisplay::setMazeModelMat(glm::mat4 m)
 {
+	//set the correct maze model matrix
 	if(maze==1)
 		maze1.model = m;
 	else if(maze==2)
@@ -225,12 +229,14 @@ void mvDisplay::setMazeModelMat(glm::mat4 m)
 
 void mvDisplay::setBallModelMat(glm::mat4 m)
 {
+	//set ball model matrix
 	sphere.model = m;
 }
 
 mvMaze* mvDisplay::getMaze()
 {
 	if(started)
+		//return the proper maze reference
 		if(maze==1)
 			return &maze1;
 		else if(maze==2)
@@ -241,6 +247,7 @@ mvMaze* mvDisplay::getMaze()
 
 mvSphere* mvDisplay::getSphere()
 {
+	//return the sphere reference
 	if(started)
 		return &sphere;
 	else

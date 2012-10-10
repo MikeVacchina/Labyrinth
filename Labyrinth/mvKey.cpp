@@ -2,6 +2,7 @@
 
 mvKey::mvKey()
 {
+	//set default values
 	pressed = false;
 	downTime = 0.0;
 }

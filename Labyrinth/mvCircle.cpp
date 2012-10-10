@@ -3,6 +3,7 @@
 
 mvCircle::mvCircle()
 {
+	//set default values
 	center = glm::vec3(0.0);
 	radius = 0.0;
 }
