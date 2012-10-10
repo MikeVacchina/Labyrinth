@@ -63,6 +63,8 @@ private:
 	void mouseFunc(int button, int state, int x, int y);
 	void motionFunc(int x, int y);
 	void idleFunc();
+	void menuFunc(int option);
+	void subMenuFunc(int option);
 
 	//variable setters to enforce constraints on variables
 	void setTheda(double t);
@@ -82,26 +84,35 @@ private:
 
 	//collision handler
 	mvCollision collision;
+	
+	int menu;
+	int settingsMenu;
+
+	bool started;
 
 	//keep a reference to objects in framework
 	std::vector<mvObject*> objs;
 	
 	//maze orientation variables
 	double theda, phi;
+	double keyRotationRate;
+	double gravityVar;
 	
 	//singleton instance
 	static framework_labyrinth *__framework_labyrinth__;
 
 	//friend callbacks for glut
-	friend extern void displayWrapperFunc();
-	friend extern void reshapeWrapperFunc(int newWidth, int newHeight);
-	friend extern void keyboardWrapperFunc(unsigned char key, int x, int y);
-	friend extern void keyboardUpWrapperFunc(unsigned char key, int x, int y);
-	friend extern void specialWrapperFunc(int key, int x, int y);
-	friend extern void specialUpWrapperFunc(int key, int x, int y);
-	friend extern void mouseWrapperFunc(int button, int state, int x, int y);
-	friend extern void motionWrapperFunc(int x, int y);
-	friend extern void idleWrapperFunc();
+	friend void displayWrapperFunc();
+	friend void reshapeWrapperFunc(int newWidth, int newHeight);
+	friend void keyboardWrapperFunc(unsigned char key, int x, int y);
+	friend void keyboardUpWrapperFunc(unsigned char key, int x, int y);
+	friend void specialWrapperFunc(int key, int x, int y);
+	friend void specialUpWrapperFunc(int key, int x, int y);
+	friend void mouseWrapperFunc(int button, int state, int x, int y);
+	friend void motionWrapperFunc(int x, int y);
+	friend void idleWrapperFunc();
+	friend void menuWrapperFunc(int option);
+	friend void subMenuWrapperFunc(int option);
 };
 
 //callbacks for glut which call framework funcs
@@ -114,5 +125,7 @@ extern void specialUpWrapperFunc(int key, int x, int y);
 extern void mouseWrapperFunc(int button, int state, int x, int y);
 extern void motionWrapperFunc(int x, int y);
 extern void idleWrapperFunc();
+extern void menuWrapperFunc(int option);
+extern void subMenuWrapperFunc(int option);
 
 #endif //FRAMEWORK_LABYRINTH

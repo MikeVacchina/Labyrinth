@@ -3,6 +3,10 @@
 
 mvCollision::mvCollision()
 {
+	maze = NULL;
+	ball = NULL;
+
+	bouncyness = 0.5;
 }
 
 
@@ -25,19 +29,38 @@ void mvCollision::setBall(mvSphere *b)
 	radius = ball->getMeshRadius();
 }
 
+void mvCollision::clearMaze()
+{
+	maze = NULL;
+	xWalls.clear();
+	zWalls.clear();
+	holes.clear();
+	goal = glm::vec3(0.0);
+}
+
+void mvCollision::clearBall()
+{
+	ball = NULL;
+}
+
 //TODO: currently function is ugly 
 //needs to be broken down into parts
 //collision detection with the multiple objects
 //followed by collision response
-void mvCollision::resolveCollisions()
+int mvCollision::resolveCollisions()
 {
+	if(ball == NULL || maze == NULL)
+		return INVALID;
+
+	bool reachedGoal=false;
+
 	std::set<int> xWallsSet;
 	std::set<int> zWallsSet;
 	std::map<int,std::pair<int,int> > walls;
 	std::set<int> intersections;
 
 	if(ball->falling)
-		return;
+		return HOLE;
 
 	//check for a collision
 
@@ -45,6 +68,7 @@ void mvCollision::resolveCollisions()
 	if(sqrt((ball->pos.x - goal.x)*(ball->pos.x - goal.x) + (ball->pos.z - goal.y)*(ball->pos.z - goal.y)) < goal.z)
 	{
 		std::cout << "goal reached game over\n";
+		reachedGoal = true;
 	}
 
 	//check if on hole
@@ -53,6 +77,8 @@ void mvCollision::resolveCollisions()
 		double holeTest = sqrt((ball->pos.x - holes[i].x)*(ball->pos.x - holes[i].x) + (ball->pos.z - holes[i].z)*(ball->pos.z - holes[i].z));
 		if(holeTest < holes[i].r)
 		{
+			//fell into hole
+
 			//create a fall bounce to try and make the ball not go throught the floor a bit
 			glm::vec3 fallBounce(ball->pos.x - holes[i].x, 0.0, ball->pos.z - holes[i].z);
 
@@ -61,10 +87,11 @@ void mvCollision::resolveCollisions()
 
 			ball->vel = fallBounce;
 
-			//fell into hole
-			std::cout << "fell into hole game over\n";
-			ball->acc.y = -9.8;
+			ball->acc.y = -9.8f;
 			ball->falling = true;
+
+			std::cout << "fell into hole game over\n";
+			return HOLE;
 		}
 	}
 
@@ -212,7 +239,7 @@ void mvCollision::resolveCollisions()
 				//this happens because the ball is a sphere and we are doing axis aligned search to find collisions
 				//happens when ball is close to hitting a corner of a wall
 
-				return;
+				return NONE;
 			}
 
 			//get normal to line segment(s)
@@ -255,7 +282,7 @@ void mvCollision::resolveCollisions()
 		nV = glm::normalize(nV);
 
 		//scale back the velocity as momentom and energy is lost
-		float scale = glm::length(ball->vel)*0.5f;
+		float scale = glm::length(ball->vel)*bouncyness;
 			
 		nV.x = nV.x * scale;
 		nV.y = nV.y * scale;
@@ -264,4 +291,8 @@ void mvCollision::resolveCollisions()
 		//set new velocity
 		ball->vel = nV;
 	}
+
+	if(reachedGoal)
+		return GOAL;
+	return NONE;
 }

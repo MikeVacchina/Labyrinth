@@ -6,8 +6,9 @@ mvDisplay::mvDisplay()
 	width = 640;
 	height = 480;
 
-	//load maze object
-	maze.loadMaze("maze2.mv");
+	////load maze object
+	maze1.loadMaze("maze1.mv");
+	maze2.loadMaze("maze2.mv");
 
 	//load sphere object and translate/scale mesh
 	sphere.loadMesh("sphere.obj");
@@ -16,6 +17,8 @@ mvDisplay::mvDisplay()
 	sphere.scale(r);
 	r = sphere.getMeshRadius();
 	sphere.translate(0.0,r,0.0);
+
+	started = false;
 }
 
 
@@ -37,7 +40,8 @@ void mvDisplay::initializeDisplay(std::string windowName, int w, int h)
 bool mvDisplay::initializeDisplayResources()
 {
 	//initialize objects
-	objectBufferInit(maze);
+	objectBufferInit(maze1);
+	objectBufferInit(maze2);
 	objectBufferInit(sphere);
 
 	//create shaders
@@ -163,9 +167,15 @@ void mvDisplay::display()
     glClearColor(0.0, 0.0, 0.2f, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//display objects
-	displayObject(maze);
-	displayObject(sphere);
+	if(started)
+	{
+		//display objects
+		if(maze==1)
+			displayObject(maze1);
+		else if(maze==2)
+			displayObject(maze2);
+		displayObject(sphere);
+	}
 
     //swap the buffers
     glutSwapBuffers();
@@ -182,9 +192,35 @@ void mvDisplay::reshape(int newWidth, int newHeight)
     projection = glm::perspective(45.0f, float(width)/float(height), 0.01f, 100.0f);
 }
 
+void mvDisplay::playMaze(int mazeID)
+{
+	//load maze object
+	maze = mazeID;
+	
+	if(maze==1)
+	{
+		sphere.falling = false;
+		sphere.acc = glm::vec3(0.0);
+		sphere.vel = glm::vec3(0.0);
+		sphere.pos = maze1.getBegin();
+	}
+	else if(maze==2)
+	{
+		sphere.falling = false;
+		sphere.acc = glm::vec3(0.0);
+		sphere.vel = glm::vec3(0.0);
+		sphere.pos = maze2.getBegin();
+	}
+
+	started = true;
+}
+
 void mvDisplay::setMazeModelMat(glm::mat4 m)
 {
-	maze.model = m;
+	if(maze==1)
+		maze1.model = m;
+	else if(maze==2)
+		maze2.model = m;
 }
 
 void mvDisplay::setBallModelMat(glm::mat4 m)
@@ -194,12 +230,21 @@ void mvDisplay::setBallModelMat(glm::mat4 m)
 
 mvMaze* mvDisplay::getMaze()
 {
-	return &maze;
+	if(started)
+		if(maze==1)
+			return &maze1;
+		else if(maze==2)
+			return &maze2;
+	else
+		return NULL;
 }
 
 mvSphere* mvDisplay::getSphere()
 {
-	return &sphere;
+	if(started)
+		return &sphere;
+	else
+		return NULL;
 }
 
 void mvDisplay::objectBufferInit(mvObject &object)

@@ -17,6 +17,11 @@ framework_labyrinth::framework_labyrinth()
 {
 	theda = 0.0;
 	phi = 0.0;
+
+	started = false;
+
+	keyRotationRate = 30.0;
+	gravityVar = -9.8;
 }
 
 framework_labyrinth* framework_labyrinth::instance()
@@ -51,20 +56,6 @@ bool framework_labyrinth::initialize(std::string windowName, int windowWidth, in
 	if(!display.initializeDisplayResources())
 		return false;
 
-	//set objects pointers in collision and physics objects
-	mvMaze *m = display.getMaze();
-	mvSphere *b = display.getSphere();
-
-	b->pos = m->getBegin();
-	
-	objs.push_back(dynamic_cast<mvObject*>(m));
-	objs.push_back(dynamic_cast<mvObject*>(b));
-
-	physics.setObjs(objs);
-
-	collision.setMaze(m);
-	collision.setBall(b);
-
 	//start stopwatch
 	stopwatch.startTime();
 
@@ -83,6 +74,29 @@ void framework_labyrinth::initializeCallbacks()
 	glutMouseFunc(mouseWrapperFunc);
 	glutMotionFunc(motionWrapperFunc);
 	glutIdleFunc(idleWrapperFunc);
+
+	settingsMenu = glutCreateMenu(subMenuWrapperFunc);
+	
+	glutAddMenuEntry("Increase Mouse Sensitivity", INCMOUSE);
+	glutAddMenuEntry("Decrease Mouse Sensitivity", DECMOUSE);
+	glutAddMenuEntry("Increase Key Sensitivity", INCKEY);
+	glutAddMenuEntry("Decrease Key Sensitivity", DECKEY);
+	glutAddMenuEntry("Increase Gravity", INCGRAVITY);
+	glutAddMenuEntry("Decrease Gravity", DECGRAVITY);
+	glutAddMenuEntry("Increase Bounce", INCBOUNCE);
+	glutAddMenuEntry("Decrease Bounce", DECBOUNCE);
+	glutAddMenuEntry("Reset to Defaults", RESET);
+
+	menu = glutCreateMenu(menuWrapperFunc);
+	
+	glutAddMenuEntry("Play Maze 1", PLAYMAZEONE);
+	glutAddMenuEntry("Play Maze 2", PLAYMAZETWO);
+	glutAddMenuEntry("Restart", RESTART);
+	glutAddSubMenu("Settings", settingsMenu);
+	glutAddMenuEntry("Quit", QUIT);
+
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+
 }
 
 void framework_labyrinth::displayFunc()
@@ -142,6 +156,9 @@ void framework_labyrinth::motionFunc(int x, int y)
 
 void framework_labyrinth::idleFunc()
 {
+	if(!started)
+		return;
+
 	//update object pos from input
 
 	glm::mat4 rotationTheda;
@@ -149,8 +166,6 @@ void framework_labyrinth::idleFunc()
 	glm::mat4 mm;//mazeModel
 
 	glm::vec4 phiAxis(0.0,0.0,1.0,0.0);
-
-	double keyRotationRate = 30.0;
 	
 	double deltaThedaTime=0.0;
 	double deltaPhiTime=0.0;
@@ -191,7 +206,7 @@ void framework_labyrinth::idleFunc()
 	glm::mat4 worldRotation = glm::inverse(mm);
 
 	//default gravity
-	glm::vec4 gravity(0.0,-9.8,0.0,0.0);
+	glm::vec4 gravity(0.0,gravityVar,0.0,0.0);
 
 	//get gravity relative to static maze
 	gravity = worldRotation*gravity;
@@ -216,6 +231,119 @@ void framework_labyrinth::idleFunc()
 
 	//call the glut display callback
     glutPostRedisplay();
+}
+
+void framework_labyrinth::menuFunc(int option)
+{
+	mvMaze *m;
+	mvSphere *b;
+
+	switch(option)
+	{
+	case PLAYMAZEONE:
+		setTheda(0.0);
+		setPhi(0.0);
+		objs.clear();
+
+		physics.clearObjs();
+		collision.clearBall();
+		collision.clearMaze();
+
+		display.playMaze(1);
+
+		//set objects pointers in collision and physics objects
+		m = display.getMaze();
+		b = display.getSphere();
+
+		objs.push_back(dynamic_cast<mvObject*>(m));
+		objs.push_back(dynamic_cast<mvObject*>(b));
+
+		physics.setObjs(objs);
+
+		collision.setMaze(m);
+		collision.setBall(b);
+
+		started = true;
+		break;
+	case PLAYMAZETWO:
+		setTheda(0.0);
+		setPhi(0.0);
+		objs.clear();
+
+		physics.clearObjs();
+		collision.clearBall();
+		collision.clearMaze();
+
+		display.playMaze(2);
+
+		//set objects pointers in collision and physics objects
+		m = display.getMaze();
+		b = display.getSphere();
+
+		objs.push_back(dynamic_cast<mvObject*>(m));
+		objs.push_back(dynamic_cast<mvObject*>(b));
+
+		physics.setObjs(objs);
+
+		collision.setMaze(m);
+		collision.setBall(b);
+
+		started = true;
+		break;
+	case RESTART:
+		setTheda(0.0);
+		setPhi(0.0);
+		
+		m = display.getMaze();
+		b = display.getSphere();
+		
+		b->falling = false;
+		b->acc = glm::vec3(0.0);
+		b->vel = glm::vec3(0.0);
+		b->pos = m->getBegin();
+
+		break;
+	case QUIT:
+		exit(0);
+		break;
+	}
+}
+
+void framework_labyrinth::subMenuFunc(int option)
+{
+	switch(option)
+	{
+	case INCMOUSE:
+		userInput.increaseMouseSensitivity();
+		break;
+	case DECMOUSE:
+		userInput.decreaseMouseSensitivity();
+		break;
+	case INCKEY:
+		keyRotationRate *= 2.0;
+		break;
+	case DECKEY:
+		keyRotationRate *= 0.5;
+		break;
+	case INCGRAVITY:
+		gravityVar *= 2.0;
+		break;
+	case DECGRAVITY:
+		gravityVar *= 0.5;
+		break;
+	case INCBOUNCE:
+		collision.bouncyness *= 1.25;
+		break;
+	case DECBOUNCE:
+		collision.bouncyness *= 0.8;
+		break;
+	case RESET:	
+		userInput.resetMouseSensitivity();
+		keyRotationRate = 30.0;
+		gravityVar = -9.8;
+		collision.bouncyness = 0.5;
+		break;
+	}
 }
 
 void framework_labyrinth::setTheda(double t)
@@ -284,4 +412,14 @@ void motionWrapperFunc(int x, int y)
 void idleWrapperFunc()
 {
 	framework_labyrinth::instance()->idleFunc();
+}
+
+void menuWrapperFunc(int option)
+{
+	framework_labyrinth::instance()->menuFunc(option);
+}
+
+void subMenuWrapperFunc(int option)
+{
+	framework_labyrinth::instance()->subMenuFunc(option);
 }

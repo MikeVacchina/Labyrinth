@@ -26,11 +26,17 @@ public:
 	
 	double timeKeyDown(unsigned char key);
 	double timeSpecialDown(int key);
+	
+	void increaseMouseSensitivity();
+	void decreaseMouseSensitivity();
+	void resetMouseSensitivity();
 
 private:
 	double init_x, init_y, init_theda, init_phi;
 	_mouseState lMouse;
 	_mouseState rMouse;
+
+	double mouseSensitivity;
 	
 	std::map<unsigned char, mvKey> keyStates;
 	std::map<int, mvKey> specialStates;

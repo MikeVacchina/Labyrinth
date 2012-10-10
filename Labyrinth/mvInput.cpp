@@ -5,6 +5,8 @@ mvInput::mvInput()
 {
 	lMouse = MOUSE_INVALID;
 	rMouse = MOUSE_INVALID;
+
+	mouseSensitivity = 15.0;
 }
 
 
@@ -38,8 +40,8 @@ bool mvInput::handleMouseMotionFunc(int x, int y, mvMouseData &mouseOutput)
 	if(lMouse == MOUSE_DOWN)
 	{
 		//if left mouse is down set theda and phi base on motion of mouse from initial position
-		mouseOutput.theda = init_theda + (init_y - y)/15.0;
-		mouseOutput.phi = init_phi + (x - init_x)/15.0;
+		mouseOutput.theda = init_theda + (init_y - y)/mouseSensitivity;
+		mouseOutput.phi = init_phi + (x - init_x)/mouseSensitivity;
 		return true;
 	}
 	return false;
@@ -92,4 +94,19 @@ double mvInput::timeSpecialDown(int key)
 {
 	//get length of time special key was/is down
 	return specialStates[key].timeDown();
+}
+	
+void mvInput::increaseMouseSensitivity()
+{
+	mouseSensitivity *= 0.5;
+}
+
+void mvInput::decreaseMouseSensitivity()
+{
+	mouseSensitivity *= 2.0;
+}
+
+void mvInput::resetMouseSensitivity()
+{
+	mouseSensitivity = 15.0;
 }

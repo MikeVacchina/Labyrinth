@@ -30,6 +30,9 @@ public:
 	//sets all objects
 	void setObjs(std::vector<mvObject*> o);
 
+	//clears all objects
+	void clearObjs();
+
 	//updates the physics and position of objects
 	void update(double deltaTime);
 	

@@ -13,6 +13,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 
+#include "defines.h"
+
 #include "mvObject.h"
 #include "mvMaze.h"
 #include "mvSphere.h"
@@ -28,7 +30,12 @@ public:
 	void setMaze(mvMaze *m);
 	void setBall(mvSphere *b);
 
-	void resolveCollisions();
+	void clearMaze();
+	void clearBall();
+
+	int resolveCollisions();
+
+	float bouncyness;
 
 private:
 	mvMaze *maze;

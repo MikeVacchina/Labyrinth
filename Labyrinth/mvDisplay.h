@@ -41,6 +41,8 @@ public:
 
 	void reshape(int newWidth, int newHeight);
 
+	void playMaze(int mazeID);
+
 	void setMazeModelMat(glm::mat4 m);
 	void setBallModelMat(glm::mat4 m);
 
@@ -66,8 +68,13 @@ private:
 	glm::mat4 view;//world->eye
 	glm::mat4 projection;//eye->clip
 
+	bool started;
+
+	int maze;
+
 	//objects
-	mvMaze maze;
+	mvMaze maze1;
+	mvMaze maze2;
 	mvSphere sphere;
 };
 

@@ -21,6 +21,11 @@ void mvPhysics::setObjs(std::vector<mvObject*> o)
 	objs = o;
 }
 
+void mvPhysics::clearObjs()
+{
+	objs.clear();
+}
+
 void mvPhysics::update(double deltaTime)
 {
 	glm::vec3 T(deltaTime);
