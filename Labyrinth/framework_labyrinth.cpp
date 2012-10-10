@@ -54,6 +54,9 @@ bool framework_labyrinth::initialize(std::string windowName, int windowWidth, in
 	//initialize callbacks
 	initializeCallbacks();
 
+	//create menus
+	createMenus();
+
 	//initialize resources
 	if(!display.initializeDisplayResources())
 		return false;
