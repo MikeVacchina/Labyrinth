@@ -11,6 +11,8 @@ struct mvVertex
 {
     GLfloat position[3];
     GLfloat color[3];
+    GLfloat normal[3];
+	GLfloat uv[2];
 };
 
 //mouse data to pass things from framework to input and vice versa
@@ -71,6 +73,38 @@ public:
 	}
 
 	double x, y, z;
+};
+
+class vec2
+{
+public:
+	vec2(double _x=0, double _y=0)
+	{
+		x = _x;
+		y = _y;
+	}
+
+	vec2 plus(int val)
+	{
+		return vec2(x+val, y+val);
+	}
+
+	vec2 plus(vec2 val)
+	{
+		return vec2(x+val.x, y+val.y);
+	}
+
+	vec2 mulScalar(double val)
+	{
+		return vec2(x*val, y*val);
+	}
+
+	vec2 mul(vec2 val)
+	{
+		return vec2(x*val.x, y*val.y);
+	}
+
+	double x, y;
 };
 
 //single axis wall that would be paired with 

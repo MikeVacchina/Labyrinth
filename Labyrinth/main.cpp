@@ -13,7 +13,11 @@ int main(int argc, char **argv)
 	initializeGlut(argc,argv);
 
 	//initialize labyrinth game
-	framework_labyrinth::instance()->initialize("Labyrinth Game", windowWidth, windowHeight);
+	if(!framework_labyrinth::instance()->initialize("Labyrinth Game", windowWidth, windowHeight))
+	{
+		system("PAUSE");
+		return -1;
+	}
 
 	//start glut main loop
 	startGlut();

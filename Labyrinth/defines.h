@@ -20,6 +20,8 @@ const int INCGRAVITY	= 5;
 const int DECGRAVITY	= 6;
 const int INCBOUNCE		= 7;
 const int DECBOUNCE		= 8;
+const int TOGLIGHTONE	= 10;
+const int TOGLIGHTTWO	= 11;
 const int RESET			= 9;
 
 //Define return values for the collision detection

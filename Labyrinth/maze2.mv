@@ -1,4 +1,18 @@
-f floor2.obj
+f maze2top.obj
+f maze2btm.obj
+f maze2side1.obj
+f maze2side2.obj
+f maze2side3.obj
+f maze2side4.obj
+f maze2h1.obj
+f maze2h2.obj
+f maze2h3.obj
+f maze2h4.obj
+f maze2h5.obj
+f maze2h6.obj
+f maze2h7.obj
+f maze2h8.obj
+
 c cube.obj
 w 4.75 0 0.5 10
 w -4.75 0 0.5 10

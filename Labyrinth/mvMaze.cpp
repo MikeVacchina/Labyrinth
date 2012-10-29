@@ -22,6 +22,12 @@ bool mvMaze::loadMaze(const char *filename)
 		return false;
 	}
 
+	
+	xWalls.clear();
+	zWalls.clear();
+	holes.clear();
+	mesh.clear();
+
 	//load obj
 	while(skipCommentLine(ifs))
 	{
@@ -177,9 +183,7 @@ bool mvMaze::processLine(std::istream &is)
 		floor.setColor(0.0,1.0,1.0);
 
 		//add mesh
-		mesh = floor.getMesh();
-		xWalls.clear();
-		zWalls.clear();
+		mesh.addMesh(floor.getMesh());
 	}
 	else if(ele == "c")//basic cube obj
 	{

@@ -105,8 +105,9 @@ bool mvObjLoader::processLine(mvMesh &mesh, std::istream &is)
 	}
 	else if(ele == "usemtl")
 	{
-		//nothing to do here...
-		skipLine(is);
+		//we are going to cheat a bit and put texture file here
+		is >> ele;
+		mesh.addTexture(ele);
 	}
 	else if(ele == "v")
 	{
@@ -116,20 +117,20 @@ bool mvObjLoader::processLine(mvMesh &mesh, std::istream &is)
 	}
 	else if(ele == "vt")
 	{
-		//nothing to do here...
-		skipLine(is);
+		is >> x >> y;
+		mesh.addUV( vec2(x, y) );
 	}
 	else if(ele == "vn")
 	{
-		//nothing to do here...
-		skipLine(is);
+		is >> x >> y >> z;
+		mesh.addVertexNorm( vec3(x, y, z) );
 	}
 	else if(ele == "f")
 	{
 		//assume for now only triangles with only vertices
 		//add face
 		is >> x >> y >> z;
-		mesh.addFace( vec3(x, y, z) );
+		mesh.addFace( vec3(x-1, y-1, z-1) );
 	}
 	else
 	{

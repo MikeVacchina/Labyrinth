@@ -57,6 +57,9 @@ public:
 	
 	//return reference to ball
 	mvSphere* getSphere();
+	
+	void toggleLightOne();
+	void toggleLightTwo();
 
 private:
 	//initialize the object for gl and glut
@@ -70,14 +73,32 @@ private:
 	GLuint program;
 
 	//uniform locations
-	GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
+	GLint loc_ModelView;
+	GLint loc_Projection;
+	
+	GLint loc_lightOne;
+	GLint loc_lightTwo;
+	GLint loc_AP;
+	GLint loc_DP;
+	GLint loc_SP;
+	GLint loc_shininess;
+	GLint loc_texSampler;
 
 	//attribute locations
 	GLint loc_position;
 	GLint loc_color;
+	GLint loc_norm;
+	GLint loc_uv;
 
 	glm::mat4 view;//world->eye
 	glm::mat4 projection;//eye->clip
+	
+	glm::vec4 lightOne;
+	glm::vec4 lightTwo;
+	glm::vec4 AP;
+	glm::vec4 DP;
+	glm::vec4 SP;
+	float shininess;
 
 	//flag to know when to display objects
 	bool started;
@@ -89,6 +110,12 @@ private:
 	mvMaze maze1;
 	mvMaze maze2;
 	mvSphere sphere;
+
+	mvObject dragon;
+	glm::mat4 dragonModel;
+
+	mvObject texCube;
+	glm::mat4 texCubeModel;
 };
 
 #endif //MVDISPLAY

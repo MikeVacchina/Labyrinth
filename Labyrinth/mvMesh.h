@@ -2,6 +2,7 @@
 #define MVMESH
 
 #include <vector>
+#include <cstdio>
 
 #include "mvSimpleStructs.h"
 
@@ -14,6 +15,14 @@ public:
 	
 	void addVertex(vec3 v);
 	void addFace(vec3 f);
+	void addVertexNorm(vec3 vn);
+	void addUV(vec2 vt);
+
+	void addTexture(std::string file);
+
+	bool hasTexture();
+
+	GLuint getTextureID();
 	
 	void setColor(vec3 c);
 	void setColor(double r, double g, double b);
@@ -35,8 +44,11 @@ public:
 
 private:
 	std::vector<vec3> vertices;
+	std::vector<vec3> vertexNorms;
 	std::vector<vec3> faces;
 	std::vector<vec3> colors;
+	std::vector<vec2> UV;
+	GLuint textureID;
 };
 
 #endif // MVMESH

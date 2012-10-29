@@ -15,6 +15,8 @@
 #include "mvObjLoader.h"
 #include "mvMesh.h"
 
+#include "assimpObjLoader.h"
+
 //simple object class that all other objects should inherit from
 //NOTE: probably will experience problems if mesh is changed after loading it into buffer for glut
 class mvObject
@@ -30,9 +32,12 @@ public:
 	//and need to be reset each time mesh changes
 	mvVertex *geometry;
 	int vertexCount;
-
+	
 	//basic loadMesh function
 	virtual void loadMesh(const char *filename);
+
+	//assimp loadMesh function
+	virtual void assimpLoadMesh(const char *filename);
 
 	//basic getMesh function (returns a copy)
 	virtual mvMesh getMesh();
@@ -40,8 +45,12 @@ public:
 	//sets the color of the entire mesh and reloads geometry
 	virtual void setColor(double r, double g, double b);
 
+	virtual bool hasTexture();
+
 	//gets size of geometry for glut / opengl
 	virtual int sizeofgeometry();
+
+	virtual void bind();
 	
 	//physics variables
 	glm::vec3 acc;
@@ -53,6 +62,9 @@ public:
 
 protected:
 	mvMesh mesh;
+
+	bool textured;
+	GLuint textureID;
 };
 
 #endif //MVOBJECT

@@ -95,6 +95,8 @@ void framework_labyrinth::createMenus()
 	glutAddMenuEntry("Decrease Gravity", DECGRAVITY);
 	glutAddMenuEntry("Increase Bounce", INCBOUNCE);
 	glutAddMenuEntry("Decrease Bounce", DECBOUNCE);
+	glutAddMenuEntry("Toggle Light One", TOGLIGHTONE);
+	glutAddMenuEntry("Toggle Light Two", TOGLIGHTTWO);
 	glutAddMenuEntry("Reset to Defaults", RESET);
 
 	//create main menu
@@ -378,6 +380,12 @@ void framework_labyrinth::subMenuFunc(int option)
 		break;
 	case DECBOUNCE:
 		collision.bouncyness *= 0.8;
+		break;
+	case TOGLIGHTONE:
+		display.toggleLightOne();
+		break;
+	case TOGLIGHTTWO:
+		display.toggleLightTwo();
 		break;
 	case RESET:	
 		//reset all settings
